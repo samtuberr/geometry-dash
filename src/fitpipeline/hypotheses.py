@@ -94,7 +94,7 @@ def _second_moment(vectors: np.ndarray, weights: np.ndarray) -> np.ndarray:
     return (vectors * weights[:, None]).T @ vectors
 
 
-def _perpendicular_basis(axis: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+def perpendicular_basis(axis: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     helper = np.zeros(3)
     helper[np.argmin(np.abs(axis))] = 1.0
     first = np.cross(axis, helper)
@@ -156,7 +156,7 @@ def _guess_cylinder(segment: NormalizedSegment) -> Parameters | None:
     if eigenvalues[1] <= _RANK_TOL:  # normals all (nearly) parallel: a plane
         return None
     axis = _canonical_sign(eigenvectors[:, 0])
-    first, second = _perpendicular_basis(axis)
+    first, second = perpendicular_basis(axis)
     circle = _fit_circle(x @ first, x @ second, w)
     if circle is None:
         return None
@@ -256,6 +256,22 @@ def _is_finite(parameters: Parameters) -> bool:
     return all(np.isfinite(value).all() for value in parameters.values())
 
 
+def score_parameters(
+    primitive_type: str, normalized_parameters: Parameters, segment: NormalizedSegment
+) -> tuple[float, float]:
+    """(relative RMS vertex distance, RMS facet-normal angle in radians) of a fit.
+
+    Parameters are in the segment's normalized frame; both averages are weighted by area.
+    """
+    distances = surface_distance(primitive_type, normalized_parameters, segment.vertices)
+    relative_rms = float(np.sqrt(segment.vertex_weights @ distances**2))
+    surface_normals = surface_normal(
+        primitive_type, normalized_parameters, segment.facet_centroids
+    )
+    angles = _normal_angle(segment.facet_normals, surface_normals)
+    return relative_rms, float(np.sqrt(segment.facet_weights @ angles**2))
+
+
 def propose_hypotheses(record: SegmentRecord) -> list[Hypothesis]:
     """Initial guesses for every primitive type that is computable for the segment.
 
@@ -269,11 +285,7 @@ def propose_hypotheses(record: SegmentRecord) -> list[Hypothesis]:
         normalized = _GUESSERS[primitive_type](segment)
         if normalized is None or not _is_finite(normalized):
             continue
-        distances = surface_distance(primitive_type, normalized, segment.vertices)
-        relative_rms = float(np.sqrt(segment.vertex_weights @ distances**2))
-        surface_normals = surface_normal(primitive_type, normalized, segment.facet_centroids)
-        angles = _normal_angle(segment.facet_normals, surface_normals)
-        normal_rms = float(np.sqrt(segment.facet_weights @ angles**2))
+        relative_rms, normal_rms = score_parameters(primitive_type, normalized, segment)
         hypotheses.append(
             Hypothesis(
                 primitive_type=primitive_type,

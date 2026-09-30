@@ -40,6 +40,9 @@ class Normalization:
     def points_from_normalized(self, points: np.ndarray) -> np.ndarray:
         return np.asarray(points, dtype=np.float64) * self.scale + self.center
 
+    def lengths_to_normalized(self, lengths: np.ndarray | float) -> np.ndarray | float:
+        return lengths / self.scale
+
     def lengths_from_normalized(self, lengths: np.ndarray | float) -> np.ndarray | float:
         return lengths * self.scale
 
