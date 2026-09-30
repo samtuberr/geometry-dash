@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>חישובים בסיסיים - fitpipeline</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-right: 4px solid #3498db;
+            padding-right: 10px;
+        }
+        h3 {
+            color: #5a6c7d;
+        }
+        .module-box {
+            background: #ecf0f1;
+            border-right: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .concept-box {
+            background: #e8f4f8;
+            border-right: 4px solid #16a085;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .code-inline {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        .finding-box {
+            background: #fff3cd;
+            border-right: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #34495e;
+            color: white;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .metric {
+            display: inline-block;
+            background: #ecf0f1;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            border-right: 3px solid #3498db;
+        }
+        .success { color: #27ae60; font-weight: bold; }
+        .warning { color: #f39c12; font-weight: bold; }
+        .error { color: #e74c3c; font-weight: bold; }
+        .library {
+            display: inline-block;
+            background: #d5f4e6;
+            padding: 8px 12px;
+            margin: 3px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .library.numpy { border-right: 3px solid #e74c3c; }
+        .library.scipy { border-right: 3px solid #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>שלב החישובים הבסיסיים - fitpipeline</h1>
+        <p><strong>תאריך:</strong> 30 ספטמבר 2026 | <strong>סטטוס:</strong> <span class="success">✓ בוצע</span></p>
+
+        <h2>סקירה כללית</h2>
+        <p>שלב זה לוקח סגמנט (קבוצת משולשים מהרשת) ומחשב שתי קבוצות דברים:</p>
+        <ol>
+            <li><strong>נרמול והשקלול:</strong> מעביר את הקודקודים וגודל המשטח למערכת צירים סטנדרטית כדי שהמתמטיקה לא תלויה ביחידות או מיקום</li>
+            <li><strong>השערות התחלתיות:</strong> מנחש את סוג הפרימיטיב (מישור, גליל, קונוס, כדור, טורוס) ואת הפרמטרים שלו בנוסחה סגורה</li>
+        </ol>
+
+        <h2>המודולים שנוצרו</h2>
+
+        <div class="module-box">
+            <h3>1. <code class="code-inline">geometry.py</code> – נרמול וקבוצות דגימה</h3>
+            <p>מבודד את ה-"נרמול" — שינוי קנה מידה והעברה — מהגיאומטריה עצמה.</p>
+
+            <h4>המחלקה <code class="code-inline">Normalization</code></h4>
+            <p>שומרת שני פרמטרים:</p>
+            <ul>
+                <li><strong>center:</strong> מרכז הסגמנט בתוך מערכת הקואורדינטות המקורית</li>
+                <li><strong>scale:</strong> האורך המייצג של הסגמנט (בתוך מערכת המקורית)</li>
+            </ul>
+            <p>שתי פונקציות:</p>
+            <ul>
+                <li><span class="code-inline">points_to_normalized(points)</span> — מעביר נקודות מהמקור לנרמול: <code>(p − center) / scale</code></li>
+                <li><span class="code-inline">points_from_normalized(points)</span> — חזרה למקור: <code>p × scale + center</code></li>
+            </ul>
+            <p><strong>למה?</strong> אם מתאימים בנורמול (בקנה מידה אחיד, ממורכז), הפרמטרים שנקבלים לא תלויים בהיכן עומדת הרשת או כמה גדולה היא. הם חוזרים במדויק למערכת המקור.</p>
+
+            <h4>המחלקה <code class="code-inline">NormalizedSegment</code></h4>
+            <p>משדרת את הסגמנט לנתונים שמוכנים להתאמה:</p>
+            <ul>
+                <li><span class="code-inline">vertices</span> — קודקודים בנרמול (נקודות על המשטח)</li>
+                <li><span class="code-inline">vertex_weights</span> — משקל אזור לכל קודקוד (חיובי, סכום = 1)</li>
+                <li><span class="code-inline">facet_centroids</span> — מרכזי המשולשים בנרמול</li>
+                <li><span class="code-inline">facet_normals</span> — נורמל יחידה של כל משולש</li>
+                <li><span class="code-inline">facet_weights</span> — משקל אזור של כל משולש (חיובי, סכום = 1)</li>
+            </ul>
+            <p><strong>למה קדקודים וגם משולשים?</strong> קדקודים עוזרים להשערות הגיאומטריות (התאמת מעגל, חישוב זווית). נורמלים של משולשים בודקים אם הנחשת את סוג הפרימיטיב נכון (נורמל מישור מקביל למישור, נורמל גליל בניצב לציר).</p>
+
+            <h4>הפונקציה <span class="code-inline">prepare_segment(record)</span></h4>
+            <p>מחשבת את הנרמול:</p>
+            <ul>
+                <li><strong>center:</strong> צנטרואיד משוקלל שטח של כל המשולשים</li>
+                <li><strong>scale:</strong> שורש ממוצע הריבועים (RMS) של מרחקי הקדקודים מהצנטרואיד</li>
+            </ul>
+        </div>
+
+        <div class="concept-box">
+            <h3>💡 מושג: צנטרואיד (Centroid)</h3>
+            <p>מרכז המסה של צורה. אם כל משולש בסגמנט בעל משקל שווה לשטחו, הצנטרואיד הוא ממוצע משוקלל של מרכזי המשולשים:</p>
+            <p style="text-align: center; font-family: monospace;">
+                centroid = Σ (area<sub>i</sub> × center<sub>i</sub>) / Σ area<sub>i</sub>
+            </p>
+            <p>זה עדיף על ממוצע קודקודים פשוט, כי משולשים גדולים כמו שצריך להשפיע יותר.</p>
+        </div>
+
+        <div class="concept-box">
+            <h3>💡 מושג: שטח משוקלל (Area-weighted)</h3>
+            <p>כשמשולשים בסגמנט בגדלים שונים מאוד (למשל, טריאנגולציה אדפטיבית), משקל שטח מבטיח שהמשולשים הקטנים לא יסיטו את הנחשה או ההתאמה.</p>
+            <p>דוגמה: סגמנט גליל עם משולש גדול בקצה וריבוי משולשים זעירים בצד. אם שוקללים רק קודקודים, הקצה הגדול משפיע יותר מדי.</p>
+        </div>
+
+        <div class="module-box">
+            <h3>2. <code class="code-inline">primitives.py</code> – מרחק ונורמל לכל פרימיטיב</h3>
+            <p>לכל סוג פרימיטיב (מישור, גליל, קונוס, כדור, טורוס), שתי פונקציות:</p>
+
+            <h4>פונקציות מרחק</h4>
+            <ul>
+                <li><span class="code-inline">distance_to_plane(points, point, normal)</span> — מרחק מנקודה למישור</li>
+                <li><span class="code-inline">distance_to_sphere(points, center, radius)</span> — מרחק מנקודה לכדור</li>
+                <li><span class="code-inline">distance_to_cylinder(points, axis_point, axis_direction, radius)</span></li>
+                <li><span class="code-inline">distance_to_cone(points, apex, axis_direction, half_angle_radians)</span></li>
+                <li><span class="code-inline">distance_to_torus(points, center, axis_direction, major_radius, minor_radius)</span></li>
+            </ul>
+            <p>כל מרחק הוא אל <strong>משטח אינסופי</strong> (לא מוגבל). זה חשוב: קונוס לא יהיה לו "קצה עליון".</p>
+
+            <h4>פונקציות נורמל</h4>
+            <ul>
+                <li><span class="code-inline">normal_of_*(points, ...)</span> — נורמל יחידה של המשטח בנקודה הקרובה ביותר</li>
+            </ul>
+            <p><strong>למה נורמלים?</strong> בדיקה: אם אתה בטוח שזה מישור, הנורמל של המשטח צריך להיות זהה (או הפוך) לנורמלי משולשי הקלט. אם הזווית בין הנורמלים גדולה, זו סימן שהנחשת לא בדיוק.</p>
+        </div>
+
+        <div class="module-box">
+            <h3>3. <code class="code-inline">hypotheses.py</code> – השערות התחלתיות</h3>
+            <p>הפונקציה המרכזית: <span class="code-inline">propose_hypotheses(record)</span></p>
+            <p>מחזירה רשימה של <span class="code-inline">Hypothesis</span>, אחת לכל סוג פרימיטיב שניתן לחשב.</p>
+
+            <h4>כל הנחשה מכילה:</h4>
+            <ul>
+                <li><span class="code-inline">primitive_type</span> — סוג הפרימיטיב</li>
+                <li><span class="code-inline">parameters</span> — הפרמטרים (בנורמול ובמערכת המקור)</li>
+                <li><span class="code-inline">relative_rms</span> — שארית יחסית (מרחק קדקודים ממשטח, בתוך קנה מידה הנרמול)</li>
+                <li><span class="code-inline">normal_rms_radians</span> — רעש בנורמלים (זווית בינלאומי רדיאנים)</li>
+            </ul>
+
+            <h4>איך כל סוג מחושב:</h4>
+            <table>
+                <tr>
+                    <th>סוג</th>
+                    <th>שיטה</th>
+                    <th>מקור הנתונים</th>
+                </tr>
+                <tr>
+                    <td><strong>מישור</strong></td>
+                    <td>PCA על קדקודים → הוקטור הקטן ביותר הוא הנורמל</td>
+                    <td>קדקודים</td>
+                </tr>
+                <tr>
+                    <td><strong>כדור</strong></td>
+                    <td>ריבועים פחותים ליניאריים (אלגברי)</td>
+                    <td>קדקודים</td>
+                </tr>
+                <tr>
+                    <td><strong>גליל</strong></td>
+                    <td>ציר מ-PCA של נורמלים, רדיוס מהתאמת מעגל</td>
+                    <td>נורמלים וקדקודים</td>
+                </tr>
+                <tr>
+                    <td><strong>קונוס</strong></td>
+                    <td>ציר וקודקוד מנורמלים, זווית מקדקודים (חדש!)</td>
+                    <td>נורמלים וקדקודים</td>
+                </tr>
+                <tr>
+                    <td><strong>טורוס</strong></td>
+                    <td>ציר מקואורדינטות פלקר, רדיוסים מהתאמת מעגל</td>
+                    <td>נורמלים וקדקודים</td>
+                </tr>
+            </table>
+
+            <p><strong>חשוב:</strong> אין איטרציות, אין אקראיות. כל הנחשה היא חישוב סגור (SVD, ריבועים פחותים).</p>
+        </div>
+
+        <h2>איך הספריות תורמות</h2>
+
+        <div style="margin: 20px 0;">
+            <span class="library numpy">NumPy</span>
+            <p style="margin-top: 10px;">
+                <strong>מה:</strong> חישובים מטריציים מהירים<br>
+                <strong>שימוש כאן:</strong>
+            </p>
+            <ul>
+                <li><span class="code-inline">np.linalg.eigh</span> — SVD של מטריצות ממשיות סימטריות (PCA)</li>
+                <li><span class="code-inline">np.linalg.lstsq</span> — ריבועים פחותים לינאריים (כדור, טורוס)</li>
+                <li><span class="code-inline">np.linalg.norm</span> — אורך וקטורים (נורמלים, מרחקים)</li>
+                <li><span class="code-inline">np.cross</span> — מכפלה וקטורית (נורמלים, קואורדינטות פלקר)</li>
+                <li>פעולות בסיסיות: חיסור מטריצות, כפל נקודה, broadcast</li>
+            </ul>
+            <p><strong>למה?</strong> NumPy עובד בדיוק עם מספרים גדולים, אותו חישוב נותן תמיד תוצאה זהה.</p>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <span class="library scipy">SciPy</span>
+            <p style="margin-top: 10px;">
+                <strong>מה:</strong> אלגוריתמים מדעיים מתקדמים<br>
+                <strong>שימוש כאן:</strong> עדיין לא בשלב הזה! בשלב הבא (התאמה עם least_squares) נשתמש ב-<span class="code-inline">scipy.optimize.least_squares</span>.
+            </p>
+        </div>
+
+        <h2>ממצאים מהנתונים האמיתיים</h2>
+
+        <div class="finding-box">
+            <h3>✓ התאמות מושלמות (שארית &lt; 1e-6)</h3>
+            <table>
+                <tr>
+                    <th>רשת</th>
+                    <th>סגמנט</th>
+                    <th>סוג</th>
+                    <th>פרמטר</th>
+                    <th>הערה</th>
+                </tr>
+                <tr>
+                    <td>mesh_02</td>
+                    <td>0</td>
+                    <td>גליל</td>
+                    <td>רדיוס 2.0</td>
+                    <td>גליל צירי קלאסי</td>
+                </tr>
+                <tr>
+                    <td>mesh_03</td>
+                    <td>0</td>
+                    <td>קונוס</td>
+                    <td>חצי-זווית arctan(0.25)</td>
+                    <td>קונוס קטום בגובה 4</td>
+                </tr>
+                <tr>
+                    <td>mesh_04</td>
+                    <td>0</td>
+                    <td>כדור</td>
+                    <td>רדיוס 1.0</td>
+                    <td>כדור יחידה</td>
+                </tr>
+                <tr>
+                    <td>mesh_08</td>
+                    <td>0</td>
+                    <td>טורוס</td>
+                    <td>R &gt; r &gt; 0</td>
+                    <td>טורוס קלאסי</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="finding-box">
+            <h3>⚠ סגמנטים חופשיים (שארית &gt; 0.05)</h3>
+            <p>שני סגמנטים לא מתאימים לשום פרימיטיב:</p>
+            <ul>
+                <li><strong>mesh_09, segment 0:</strong> משטח גל חופשי</li>
+                <li><strong>mesh_10, segment 1:</strong> משטח מורכב</li>
+            </ul>
+            <p>שניהם יסומנו כ-<span class="code-inline">unresolved</span> בשלב הסיווג.</p>
+        </div>
+
+        <div class="finding-box">
+            <h3>⚠ מקרה מעניין: גליל מול כדור</h3>
+            <p><strong>בעיה:</strong> שני טבעות קודקודים (טיפוסי לגליל גס) יושבות גם על כדור!</p>
+            <p><strong>פתרון:</strong> תבדוק את הנורמלים. בגליל, נורמל המשטח בניצב לציר (זווית ~1.9°). בכדור, נורמל המשטח מצביע למרכז (זווית ~26.7°).</p>
+            <table>
+                <tr>
+                    <th>סוג</th>
+                    <th>RMS קדקודים</th>
+                    <th>RMS נורמלים</th>
+                </tr>
+                <tr>
+                    <td>גליל (נכון)</td>
+                    <td>1e-08</td>
+                    <td>1.9°</td>
+                </tr>
+                <tr>
+                    <td>כדור (טעות)</td>
+                    <td>5e-09</td>
+                    <td>26.7°</td>
+                </tr>
+            </table>
+            <p>ה-RMS של קדקודים קטן יותר לכדור, אבל <strong>הנורמלים חוקרים את המבנה</strong>.</p>
+        </div>
+
+        <div class="finding-box">
+            <h3>📊 סטטיסטיקה של הנחשות</h3>
+            <div class="metric">
+                <strong>43 סגמנטים בדיקה</strong>
+            </div>
+            <div class="metric">
+                <strong>136 בדיקות אוטומטיות</strong>
+            </div>
+            <div class="metric">
+                <strong>100% עוברות ✓</strong>
+            </div>
+            <p>כולל:</p>
+            <ul>
+                <li>שלוש מנות של סינתטיים לכל סוג בשישה poses (סיבוב, קנה מידה, הזזה)</li>
+                <li>כל הסגמנטים האמיתיים מ-43</li>
+                <li>בדיקות חוזרתיות מדויקות (bitwise)</li>
+                <li>בדיקות דחיית התאמה גרועה</li>
+            </ul>
+        </div>
+
+        <h2>שינוי עם קונוס</h2>
+        <p>בקונוס קטום (mesh_03), הפרימיטיב הוא <strong>קונוס אינסופי</strong>, לא קטום. הנורמלים של הפאות הם מישורי מיתר (chords), לא משיקים, ולכן הזווית שהם נוקדים קטנה מהזווית האמיתית.</p>
+        <p><strong>הפיתרון:</strong> השתמש בקדקודים כדי לחשב את הזווית בדיוק:</p>
+        <p style="text-align: center; font-family: monospace;">
+            tan(half_angle) = (area_weighted (axial × radial)) / (area_weighted axial²)
+        </p>
+        <p>זה נותן את הזווית <strong>בדיוק</strong>, בלי תלות בגובה או גודל הקטום.</p>
+
+        <h2>הצעדים הבאים</h2>
+        <p>האם ההנחשות טובות מספיק? לא תמיד:</p>
+        <ul>
+            <li><strong>טורוס:</strong> דיוק של ~1e-4 בלבד (נורמלים של פאות של טורוס טסלוני מוטים)</li>
+            <li><strong>קונוס:</strong> עכשיו דיוק 1e-8, אחרי הבחירה לשתמש בקדקודים</li>
+        </ul>
+        <p>הצעד הבא הוא <strong>התאמה רפינדמנט עם SciPy</strong>: לקחת את ההנחשה כנקודת התחלה ולהתאים עם <span class="code-inline">least_squares</span> של scipy כדי לקבל את הפרמטרים הטובים ביותר לפי הנורמה L² של המרחקים.</p>
+
+        <h2>מגבלות נוכחיות</h2>
+        <ul>
+            <li><strong>CGAL לא בשימוש:</strong> ההשערות הסגורות כיסו את כל הסגמנטים האמיתיים</li>
+            <li><strong>Plotly אופציונלי:</strong> עדיין לא מוצג בנדם להדמיה</li>
+            <li><strong>אין סיווג:</strong> רק נחשות, לא החלטה סופית על סוג</li>
+        </ul>
+
+        <hr style="margin-top: 40px; border: none; border-top: 2px solid #bbb;">
+        <p style="color: #666; font-size: 0.9em; text-align: center;">
+            בנוי עם NumPy וערכות קלות של SciPy | לא נדרשות קריאות רשת או LLM בעת הריצה
+        </p>
+    </div>
+</body>
+</html>
