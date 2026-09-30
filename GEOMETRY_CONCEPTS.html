@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מושגים בגיאומטריה - קודקודים, משולשים וסגמנטים</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+            padding: 40px;
+            overflow-x: hidden;
+        }
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .concept {
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 10px;
+            border-right: 5px solid #2a5298;
+        }
+        .concept h2 {
+            color: #1e3c72;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .emoji {
+            font-size: 1.5em;
+        }
+        .concept-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+        .concept-text {
+            line-height: 1.8;
+            font-size: 1.05em;
+            color: #444;
+        }
+        .concept-visual {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            min-height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #d39e00;
+        }
+        .formula {
+            background: #f0f0f0;
+            padding: 12px;
+            border-right: 3px solid #2a5298;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: left;
+        }
+        .example {
+            background: #e7f3ff;
+            padding: 15px;
+            border-right: 3px solid #0099ff;
+            margin: 10px 0;
+            border-radius: 5px;
+            color: #004085;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .comparison-table th {
+            background: #2a5298;
+            color: white;
+            padding: 15px;
+            text-align: right;
+            font-weight: bold;
+        }
+        .comparison-table td {
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+            text-align: right;
+        }
+        .comparison-table tr:hover {
+            background: #f9f9f9;
+        }
+        .flow {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #2a5298;
+        }
+        .flow-step {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: #f5f7fa;
+            border-radius: 5px;
+        }
+        .flow-number {
+            background: #2a5298;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-left: 15px;
+            flex-shrink: 0;
+        }
+        .flow-text {
+            margin-right: 15px;
+            flex: 1;
+        }
+        .real-example {
+            background: #e8f5e9;
+            border-right: 5px solid #4caf50;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .real-example h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        .math-box {
+            background: #fff8e1;
+            border-right: 5px solid #fbc02d;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: left;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #ddd;
+            color: #666;
+            font-size: 0.95em;
+        }
+        @media (max-width: 768px) {
+            .concept-content {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔷 מושגים בגיאומטריה: מה זה?</h1>
+
+        <!-- 1. Vertex -->
+        <div class="concept">
+            <h2><span class="emoji">🔴</span> קודקוד (Vertex)</h2>
+            <div class="concept-content">
+                <div class="concept-text">
+                    <p>קודקוד היא <strong>נקודה בחלל תלת-מימדי</strong>. בדיוק כמו שסימנת נקודה בגרף מתמטיקה.</p>
+                    <p>כל קודקוד מתואר על ידי <span class="highlight">שלוש קואורדינטות: X, Y, Z</span></p>
+                    <div class="example">
+                        <strong>דוגמה:</strong><br>
+                        Vertex A = (0, 0, 0)<br>
+                        Vertex B = (30, 0, 0)<br>
+                        Vertex C = (15, 26, 0)
+                    </div>
+                    <p>במש שלנו יש <strong>מאות או אלפי קודקודים</strong> המרכיבים את הצורה.</p>
+                </div>
+                <div class="concept-visual">
+                    <svg viewBox="0 0 200 200">
+                        <!-- Grid -->
+                        <g stroke="#ddd" stroke-width="1" opacity="0.5">
+                            <line x1="0" y1="100" x2="200" y2="100"/>
+                            <line x1="100" y1="0" x2="100" y2="200"/>
+                            <circle cx="100" cy="100" r="50" fill="none"/>
+                        </g>
+                        <!-- Axes -->
+                        <line x1="100" y1="100" x2="180" y2="100" stroke="#ff6b6b" stroke-width="2"/>
+                        <text x="185" y="105" font-size="12" fill="#ff6b6b" direction="ltr">X</text>
+                        <line x1="100" y1="100" x2="100" y2="20" stroke="#4ecdc4" stroke-width="2"/>
+                        <text x="85" y="15" font-size="12" fill="#4ecdc4">Z</text>
+                        <!-- Points -->
+                        <circle cx="100" cy="100" r="5" fill="#ff6b6b"/>
+                        <text x="105" y="115" font-size="14" font-weight="bold">A (0,0,0)</text>
+                        <circle cx="160" cy="100" r="5" fill="#4ecdc4"/>
+                        <text x="140" y="60" font-size="12">B (X,Y,Z)</text>
+                        <circle cx="70" cy="50" r="5" fill="#95e1d3"/>
+                        <text x="40" y="40" font-size="12">C</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Triangle -->
+        <div class="concept">
+            <h2><span class="emoji">△</span> משולש (Triangle)</h2>
+            <div class="concept-content">
+                <div class="concept-text">
+                    <p>משולש הוא <strong>שלוש קודקודים המחוברים</strong>. זו היחידה הבסיסית בנו מורכב כל מש.</p>
+                    <p>כל משולש מוגדר על ידי <span class="highlight">שלוש אינדקסים לקודקודים</span></p>
+                    <div class="example">
+                        <strong>דוגמה:</strong><br>
+                        Triangle #5 = (vertex 2, vertex 5, vertex 8)<br>
+                        כלומר: חבר את קודקוד #2, #5 ו-#8
+                    </div>
+                    <p>כל משולש הוא חתיכה קטנה של הפנים של ישם 3D. אלפים של משולשים קטנים יוצרים מש שלם.</p>
+                </div>
+                <div class="concept-visual">
+                    <svg viewBox="0 0 200 200">
+                        <!-- Background -->
+                        <rect width="200" height="200" fill="#f0f0f0"/>
+                        <!-- Triangle 1 -->
+                        <polygon points="50,30 150,50 70,140" fill="#ff6b6b" opacity="0.7" stroke="#d63031" stroke-width="2"/>
+                        <circle cx="50" cy="30" r="5" fill="#000"/>
+                        <circle cx="150" cy="50" r="5" fill="#000"/>
+                        <circle cx="70" cy="140" r="5" fill="#000"/>
+                        <text x="45" y="18" font-size="11" font-weight="bold">v1</text>
+                        <text x="155" y="48" font-size="11" font-weight="bold">v2</text>
+                        <text x="50" y="160" font-size="11" font-weight="bold">v3</text>
+                        <!-- Arrow -->
+                        <line x1="120" y1="100" x2="160" y2="100" stroke="#2a5298" stroke-width="2" marker-end="url(#arrowhead)"/>
+                        <text x="100" y="95" font-size="12" font-weight="bold" fill="#2a5298">3 vertices</text>
+                        <!-- Arrow marker -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#2a5298"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Mesh -->
+        <div class="concept">
+            <h2><span class="emoji">🎯</span> מש (Mesh)</h2>
+            <div class="concept-content">
+                <div class="concept-text">
+                    <p>מש הוא <strong>קבוצה של משולשים</strong> המרכיבים יחד צורה תלת-מימדית.</p>
+                    <p>מש מורכב מ:</p>
+                    <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
+                        <li><span class="highlight">Vertices array</span> — רשימת כל הקודקודים</li>
+                        <li><span class="highlight">Triangles array</span> — רשימת כל המשולשים (כל אחד הוא 3 אינדקסים)</li>
+                    </ul>
+                    <div class="example">
+                        <strong>דוגמה - מש קטן:</strong><br>
+                        Vertices: [(0,0,0), (1,0,0), (0,1,0), (1,1,0)]<br>
+                        Triangles: [(0,1,2), (1,3,2)]<br>
+                        → 2 משולשים עם 4 קודקודים
+                    </div>
+                </div>
+                <div class="concept-visual">
+                    <svg viewBox="0 0 200 200">
+                        <!-- Mesh visualization -->
+                        <g fill="none" stroke="#2a5298" stroke-width="2">
+                            <!-- Triangle 1 -->
+                            <polygon points="30,50 100,80 60,130" fill="#a8dadc" opacity="0.6"/>
+                            <!-- Triangle 2 -->
+                            <polygon points="100,80 140,120 60,130" fill="#457b9d" opacity="0.6"/>
+                            <!-- Triangle 3 -->
+                            <polygon points="100,80 140,50 140,120" fill="#1d3557" opacity="0.6"/>
+                        </g>
+                        <!-- Vertices -->
+                        <circle cx="30" cy="50" r="4" fill="#ff6b6b"/>
+                        <circle cx="100" cy="80" r="4" fill="#ff6b6b"/>
+                        <circle cx="60" cy="130" r="4" fill="#ff6b6b"/>
+                        <circle cx="140" cy="120" r="4" fill="#ff6b6b"/>
+                        <circle cx="140" cy="50" r="4" fill="#ff6b6b"/>
+                        <!-- Labels -->
+                        <text x="20" y="45" font-size="11" font-weight="bold">v0</text>
+                        <text x="105" y="75" font-size="11" font-weight="bold">v1</text>
+                        <text x="45" y="145" font-size="11" font-weight="bold">v2</text>
+                        <text x="150" y="115" font-size="11" font-weight="bold">v3</text>
+                        <text x="150" y="45" font-size="11" font-weight="bold">v4</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Segment -->
+        <div class="concept">
+            <h2><span class="emoji">🎨</span> סגמנט (Segment)</h2>
+            <div class="concept-content">
+                <div class="concept-text">
+                    <p>סגמנט היא <strong>קבוצת משולשים הקשורים זה לזה</strong> שמהווים חלק משמעותי מהמש.</p>
+                    <p>כל משולש ממש שלם מקבל מספר סגמנט (0, 1, 2, ...) שמסביר לאיזו אזור הוא שייך.</p>
+                    <div class="example">
+                        <strong>דוגמה - סעיף צילינדר:</strong><br>
+                        Triangle 0: segment 1<br>
+                        Triangle 1: segment 1<br>
+                        Triangle 2: segment 1<br>
+                        Triangle 3: segment 2 (קבוצה שונה)<br>
+                        → משולשים 0-2 יוצרים segment 1
+                    </div>
+                    <p>סגמנטים משמשים להפרדת חלקים שונים של הצורה (גליל, קוביה, כדור וכו').</p>
+                </div>
+                <div class="concept-visual">
+                    <svg viewBox="0 0 200 200">
+                        <!-- Segment 1 (Red) -->
+                        <polygon points="40,40 80,30 90,100 50,110" fill="#ff6b6b" opacity="0.7" stroke="#d63031" stroke-width="2"/>
+                        <text x="55" y="70" font-size="16" font-weight="bold" fill="white">Seg 0</text>
+
+                        <!-- Segment 2 (Blue) -->
+                        <polygon points="90,30 140,40 150,100 90,100" fill="#457b9d" opacity="0.7" stroke="#1d3557" stroke-width="2"/>
+                        <text x="105" y="70" font-size="16" font-weight="bold" fill="white">Seg 1</text>
+
+                        <!-- Segment 3 (Green) -->
+                        <polygon points="50,110 90,100 100,150 60,160" fill="#2ecc71" opacity="0.7" stroke="#27ae60" stroke-width="2"/>
+                        <text x="65" y="135" font-size="16" font-weight="bold" fill="white">Seg 2</text>
+
+                        <!-- Border -->
+                        <rect x="30" y="20" width="130" height="160" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="5"/>
+                        <text x="35" y="190" font-size="12" fill="#999">Mesh שלם</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Normal Vector -->
+        <div class="concept">
+            <h2><span class="emoji">➡️</span> וקטור נורמל (Normal Vector)</h2>
+            <div class="concept-content">
+                <div class="concept-text">
+                    <p>נורמל היא <strong>וקטור מאונך למישור המשולש</strong>. היא "מצביעה" לאן ה"חוץ" של הפנים.</p>
+                    <p>כל נורמל הוא <span class="highlight">וקטור יחידה</span> (אורך = 1) בכיוון מסוים.</p>
+                    <div class="formula">
+Normal = (B - A) × (C - A)<br/>
+(Cross product של שני צדי המשולש)
+                    </div>
+                    <div class="example">
+                        <strong>דוגמה:</strong><br>
+                        משולש שטוח במישור XY<br>
+                        Normal = [0, 0, 1] (מצביע "למעלה")<br>
+                        <br>
+                        משולש שטוח במישור XZ<br>
+                        Normal = [0, 1, 0] (מצביע "קדימה")
+                    </div>
+                    <p>נורמלים עוזרים לנו להבין את <strong>הכיוונונות</strong> של הפנים.</p>
+                </div>
+                <div class="concept-visual">
+                    <svg viewBox="0 0 200 200">
+                        <!-- 3D effect -->
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#ff6b6b;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#d63031;stop-opacity:0.8" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Triangle -->
+                        <polygon points="50,120 150,100 120,50" fill="url(#grad1)" stroke="#d63031" stroke-width="2"/>
+                        <!-- Normal vector -->
+                        <line x1="107" y1="90" x2="107" y2="20" stroke="#4ecdc4" stroke-width="3" marker-end="url(#arrowhead2)"/>
+                        <defs>
+                            <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#4ecdc4"/>
+                            </marker>
+                        </defs>
+                        <text x="80" y="35" font-size="13" font-weight="bold" fill="#4ecdc4">Normal</text>
+                        <!-- Labels -->
+                        <circle cx="50" cy="120" r="3" fill="#000"/>
+                        <text x="40" y="140" font-size="11">A</text>
+                        <circle cx="150" cy="100" r="3" fill="#000"/>
+                        <text x="155" y="105" font-size="11">B</text>
+                        <circle cx="120" cy="50" r="3" fill="#000"/>
+                        <text x="125" y="45" font-size="11">C</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Area -->
+        <div class="concept">
+            <h2><span class="emoji">📏</span> שטח (Area)</h2>
+            <div class="concept-content">
+                <div class="concept-text">
+                    <p>שטח היא <strong>הגודל של המשולש</strong> — כמה מקום הוא תופס במרחב.</p>
+                    <p>שטח משולש בחלל תלת-מימדי מחושב כך:</p>
+                    <div class="formula">
+Area = 0.5 × ||(B - A) × (C - A)||<br/>
+= חצי מהאורך של cross product
+                    </div>
+                    <div class="example">
+                        <strong>דוגמה בממדים 2:</strong><br>
+                        Triangle: A=(0,0), B=(4,0), C=(0,3)<br>
+                        Base = 4, Height = 3<br>
+                        Area = 0.5 × 4 × 3 = 6
+                    </div>
+                    <p>סגמנט עם שטח גדול פירושו הוא מכיל הרבה משולשים או משולשים גדולים.</p>
+                </div>
+                <div class="concept-visual">
+                    <svg viewBox="0 0 200 200">
+                        <!-- Triangle -->
+                        <polygon points="40,150 140,150 90,40" fill="#ffd93d" opacity="0.7" stroke="#f0ad4e" stroke-width="2"/>
+                        <!-- Annotations -->
+                        <line x1="40" y1="150" x2="140" y2="150" stroke="#ff6b6b" stroke-width="2" stroke-dasharray="5"/>
+                        <text x="70" y="170" font-size="12" font-weight="bold" fill="#ff6b6b">Base</text>
+
+                        <line x1="90" y1="150" x2="90" y2="40" stroke="#4ecdc4" stroke-width="2" stroke-dasharray="5"/>
+                        <text x="100" y="95" font-size="12" font-weight="bold" fill="#4ecdc4">Height</text>
+
+                        <!-- Vertices -->
+                        <circle cx="40" cy="150" r="4" fill="#000"/>
+                        <circle cx="140" cy="150" r="4" fill="#000"/>
+                        <circle cx="90" cy="40" r="4" fill="#000"/>
+
+                        <!-- Area label -->
+                        <text x="80" y="100" font-size="14" font-weight="bold" fill="#000" text-anchor="middle">Area</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Process Flow -->
+        <div class="flow">
+            <h3 style="color: #1e3c72; margin-bottom: 20px;">🔄 איך הלודר שלנו עובד</h3>
+            <div class="flow-step">
+                <div class="flow-number">1</div>
+                <div class="flow-text">
+                    <strong>קרא Vertices</strong><br>
+                    טוען את רשימת כל הקודקודים מ-mesh.json
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">2</div>
+                <div class="flow-text">
+                    <strong>קרא Triangles</strong><br>
+                    טוען את רשימת כל המשולשים (מי מחובר למי)
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">3</div>
+                <div class="flow-text">
+                    <strong>קרא Segments</strong><br>
+                    קורא מ-segments.json איזה משולש שייך לאיזה סגמנט
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">4</div>
+                <div class="flow-text">
+                    <strong>קבץ לפי סגמנט</strong><br>
+                    מקבץ משולשים שנמצאים באותו סגמנט
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">5</div>
+                <div class="flow-text">
+                    <strong>חשב גיאומטריה</strong><br>
+                    לכל משולש: חשב שטח וגם נורמל (וקטור מאונך)
+                </div>
+            </div>
+            <div class="flow-step">
+                <div class="flow-number">6</div>
+                <div class="flow-text">
+                    <strong>החזר NumPy arrays</strong><br>
+                    מחזיר מערכי NumPy שמוכנים לפיטינג וסיווג
+                </div>
+            </div>
+        </div>
+
+        <!-- Real World Example -->
+        <div class="real-example">
+            <h3>🌍 דוגמה מהחיים: קוביה פשוטה</h3>
+            <p><strong>קוביה עם 8 קודקודים ו-12 משולשים:</strong></p>
+            <div class="math-box">
+Vertices:
+  v0 = (0, 0, 0)
+  v1 = (1, 0, 0)
+  v2 = (1, 1, 0)
+  v3 = (0, 1, 0)
+  v4 = (0, 0, 1)
+  v5 = (1, 0, 1)
+  v6 = (1, 1, 1)
+  v7 = (0, 1, 1)
+
+Triangles (פנים שטוח):
+  Face 1: (0, 1, 2), (0, 2, 3)  → 2 משולשים
+  Face 2: (4, 5, 6), (4, 6, 7)  → 2 משולשים
+  ... (4 פנים נוספות)
+
+Segments:
+  All 12 triangles → Segment 0 (כולם קוביה אחת)
+            </div>
+            <p>✓ כל משולש: 3 קודקודים | כל פנים שטוח: 2 משולשים | כל קוביה: 12 משולשים</p>
+        </div>
+
+        <!-- Summary Table -->
+        <h3 style="text-align: center; color: #1e3c72; margin-top: 40px; margin-bottom: 20px;">📊 סיכום המושגים</h3>
+        <table class="comparison-table">
+            <tr>
+                <th>מושג</th>
+                <th>מה זה</th>
+                <th>דוגמה</th>
+                <th>גודל</th>
+            </tr>
+            <tr>
+                <td><strong>Vertex</strong></td>
+                <td>נקודה בחלל</td>
+                <td>(0, 0, 0)</td>
+                <td>1 נקודה</td>
+            </tr>
+            <tr>
+                <td><strong>Triangle</strong></td>
+                <td>3 קודקודים מחוברים</td>
+                <td>(v0, v1, v2)</td>
+                <td>3 קודקודים</td>
+            </tr>
+            <tr>
+                <td><strong>Mesh</strong></td>
+                <td>קבוצת משולשים</td>
+                <td>12 triangles</td>
+                <td>אלפי משולשים</td>
+            </tr>
+            <tr>
+                <td><strong>Segment</strong></td>
+                <td>חלק מהמש (קבוצה קשורה)</td>
+                <td>Surface of cylinder</td>
+                <td>עשרות-מאות משולשים</td>
+            </tr>
+            <tr>
+                <td><strong>Normal</strong></td>
+                <td>וקטור מאונך</td>
+                <td>[0, 0, 1]</td>
+                <td>וקטור יחידה</td>
+            </tr>
+            <tr>
+                <td><strong>Area</strong></td>
+                <td>גודל המשולש</td>
+                <td>25.5 square units</td>
+                <td>מספר חיובי</td>
+            </tr>
+        </table>
+
+        <div class="footer">
+            <p>🎓 <strong>מאת:</strong> Geometry Concepts Tutorial</p>
+            <p>להבנה עמוקה יותר של מושגים אלה, חשוב לדמיין אותם בתלת-מימד!</p>
+        </div>
+    </div>
+</body>
+</html>
