@@ -140,6 +140,10 @@ $$\sum_i w_i\,\rho\big(d_\text{signed}(x_i;\theta)\big)$$
 
 ### מוסכמות הפרמטרים
 
+![חמשת סוגי הפרימיטיבים ו-unresolved, עם הפרמטרים שנדרשים לכל אחד](docs/images/primitives.png)
+
+התמונה היא המחשה. השדות המדויקים שמדווחים מופיעים בטבלה שלמטה. למשל, החרוט מדווח לפי חצי זווית הפתיחה ולא לפי רדיוס בסיס וגובה, ולגליל ולחרוט לא מדווח גובה סופי.
+
 לפי השמות המוצעים ב-`DATA_FORMAT.md`, במרחב וביחידות של הקלט:
 
 | סוג | פרמטרים | הערות |
@@ -213,5 +217,6 @@ tests/             pytest suite (synthetic primitives in tests/synthetic.py)
 predictions.json   the submitted output
 view.py            per-segment console inspector
 explanations/      stage-by-stage write-ups in English (en/) and Hebrew (he/)
+docs/images/       figures used by the READMEs
 MVP_SPEC.md        the pre-implementation plan
 ```

@@ -126,6 +126,10 @@ This diagnostic never turns a segment into a primitive.
 
 ### Parameter conventions
 
+![The five primitive types and unresolved, with the parameters each one needs](docs/images/primitives.png)
+
+The overview is illustrative. The exact fields reported are in the table below. For example, the cone is reported by its half angle rather than by base radius and height, and no finite height is reported for cylinders or cones.
+
 These follow the suggested names in `DATA_FORMAT.md`, in the input frame and units:
 
 | Type | Parameters | Notes |
@@ -197,5 +201,6 @@ tests/             pytest suite (synthetic primitives in tests/synthetic.py)
 predictions.json   the submitted output
 view.py            per-segment console inspector
 explanations/      stage-by-stage write-ups in English (en/) and Hebrew (he/)
+docs/images/       figures used by the READMEs
 MVP_SPEC.md        the pre-implementation plan
 ```
