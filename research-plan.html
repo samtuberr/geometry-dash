@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geometry Fitting Research & Implementation Plan</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .recommendation {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+
+        .recommendation h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .recommendation p {
+            font-size: 1.05em;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #333;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            font-size: 1.3em;
+            color: #555;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .job-col {
+            font-weight: 500;
+            color: #667eea;
+            width: 25%;
+        }
+
+        .selection-col {
+            font-weight: 600;
+            color: #333;
+            width: 25%;
+        }
+
+        .reason-col {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .alternative-name {
+            font-weight: 600;
+            color: #764ba2;
+        }
+
+        .decision {
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .decision.skip {
+            background: #fee;
+            color: #c00;
+        }
+
+        .decision.reference {
+            background: #fef3cd;
+            color: #856404;
+        }
+
+        .decision.keep {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .agent-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .agent-card h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .agent-card p {
+            color: #555;
+            font-size: 0.95em;
+        }
+
+        .model-table-note {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #856404;
+        }
+
+        .timebox-note {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+            font-size: 0.95em;
+            color: #0c5460;
+        }
+
+        .key-points {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+
+        .key-points li {
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .footer {
+            background: #f8f9fa;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #eee;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d73a49;
+        }
+
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            td, th {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Geometry Fitting Pipeline</h1>
+            <p>Research & Implementation Plan</p>
+        </header>
+
+        <div class="content">
+            <div class="recommendation">
+                <h2>Recommended Approach</h2>
+                <p><strong>A local Python pipeline built on NumPy and SciPy, with CGAL available for difficult initial guesses, Plotly for inspection, and a small number of coding agents for implementation and review.</strong></p>
+                <p style="margin-top: 10px;">The finished program should classify and fit every segment without calling an LLM. This is a compatibility and capability review; we haven't benchmarked these options on the meshes or opened the dataset contents.</p>
+            </div>
+
+            <!-- Selected Stack -->
+            <section>
+                <h2>Selected Tech Stack</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Job</th>
+                            <th>Selection</th>
+                            <th>Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="job-col">Environment & Dependencies</td>
+                            <td class="selection-col">Python 3.12 + uv</td>
+                            <td class="reason-col">Reproducible environment with compatible binary packages</td>
+                        </tr>
+                        <tr>
+                            <td class="job-col">Read geometry & preserve segments</td>
+                            <td class="selection-col">Python <code>json</code> + NumPy</td>
+                            <td class="reason-col">Indexed JSON already contains what we need with direct control</td>
+                        </tr>
+                        <tr>
+                            <td class="job-col">Areas, normals, normalization, initial estimates</td>
+                            <td class="selection-col">NumPy</td>
+                            <td class="reason-col">Direct control over weighting and numerical conventions</td>
+                        </tr>
+                        <tr>
+                            <td class="job-col">Refine primitive parameters</td>
+                            <td class="selection-col">SciPy <code>least_squares</code></td>
+                            <td class="reason-col">Supports bounds, robust losses, Jacobians, and convergence diagnostics</td>
+                        </tr>
+                        <tr>
+                            <td class="job-col">Difficult cone/torus initial guesses</td>
+                            <td class="selection-col">CGAL Efficient RANSAC (optional)</td>
+                            <td class="reason-col">Existing implementation covering all five primitive types</td>
+                        </tr>
+                        <tr>
+                            <td class="job-col">Fit acceptance & classification</td>
+                            <td class="selection-col">Project-specific layer</td>
+                            <td class="reason-col">Enforces assignment rules, including unresolved results and complete-segment assessment</td>
+                        </tr>
+                        <tr>
+                            <td class="job-col">Inspect results</td>
+                            <td class="selection-col">Plotly HTML report</td>
+                            <td class="reason-col">Interactive meshes and fitted overlays, viewable locally without hosted service</td>
+                        </tr>
+                        <tr>
+                            <td class="job-col">Validate behavior</td>
+                            <td class="selection-col">pytest</td>
+                            <td class="reason-col">Focused checks of known geometry, partial surfaces, transformations, and rejection</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- CGAL Integration -->
+            <section>
+                <h2>CGAL Integration Strategy</h2>
+                <div class="timebox-note">
+                    <strong>⏱️ Time-Boxed Evaluation:</strong> 30–45 minutes at the start to test known cones and partial tori, extract usable parameters, and check repeatability. Keep it if it saves initialization work; otherwise use deterministic multiple initial guesses.
+                </div>
+                <p><strong>Important Note:</strong> This workspace currently has Python 3.14.4, while CGAL Linux wheels support only through Python 3.12. A separate Python 3.12 environment is required.</p>
+                <p style="margin-top: 15px;"><strong>Implementation Considerations:</strong></p>
+                <ul class="key-points">
+                    <li>Parameters returned as descriptive strings rather than typed objects—can serve as initial guesses for SciPy refinement</li>
+                    <li>Lacks exposed random-seed argument in the reviewed interface</li>
+                    <li>A detector finding a convincing subset does NOT establish that the whole segment fits—evaluate entire original segment</li>
+                    <li>Reference: <a href="https://raw.githubusercontent.com/CGAL/cgal-swig-bindings/main/SWIG_CGAL/Shape_detection/impl.h" target="_blank">CGAL binding implementation</a></li>
+                </ul>
+            </section>
+
+            <!-- Alternatives Analysis -->
+            <section>
+                <h2>Alternatives Analysis</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Alternative</th>
+                            <th>Findings</th>
+                            <th>Decision</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="alternative-name">geomfitty</td>
+                            <td>Fits planes, spheres, cylinders, and tori, but <strong>lacks cones</strong>. Cylinder/torus initialization remains caller's responsibility.</td>
+                            <td><span class="decision reference">Reference only</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">pyRANSAC-3D</td>
+                            <td>Published <strong>0.7.0 wheel lacks cone fitting</strong>; current repository code adds it. Neither provides torus fitting.</td>
+                            <td><span class="decision skip">Skip as dependency</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">Easy3D</td>
+                            <td>Detects all five types, but wrapper <strong>discards sphere, cone, and torus parameters</strong>.</td>
+                            <td><span class="decision skip">Skip as fitting backend</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">PCL (Point Cloud Library)</td>
+                            <td>v1.15.1 includes actual torus fitter. Common Python bindings target much older PCL versions.</td>
+                            <td><span class="decision reference">Strong C++ option; unnecessary integration work</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">CloudCompare / CloudComPy</td>
+                            <td>Supports all five primitives and refinement with larger application/plugin environment.</td>
+                            <td><span class="decision keep">Keep as external inspection option</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">Geometric Tools</td>
+                            <td>Provides cone and torus fitters, but uses algebraic objectives; torus initialization sensitive to surface coverage.</td>
+                            <td><span class="decision reference">Useful algorithm reference</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">MATLAB Localized-Voting</td>
+                            <td>Closely matches our task, supports all five primitives. Adding MATLAB or porting would consume timebox.</td>
+                            <td><span class="decision reference">Research baseline; too costly to integrate</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">Trimesh / point-cloud-utils</td>
+                            <td>Useful mesh operations, sampling, and diagnostics. Trimesh can modify indexing.</td>
+                            <td><span class="decision keep">Add only for concrete missing utility</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">Open3D / PyVista</td>
+                            <td>Strong processing and visualization tools. Plotly suits our limited inspection needs with less machinery.</td>
+                            <td><span class="decision keep">Keep as optional tools</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">Learned Primitive Fitting (SPFN)</td>
+                            <td>Supports four types (excluding torus). Published implementation requires older TensorFlow/CUDA setup.</td>
+                            <td><span class="decision skip">Skip for this dataset</span></td>
+                        </tr>
+                        <tr>
+                            <td class="alternative-name">Commercial SDKs</td>
+                            <td>OptoInspect's API includes all five fits. Access and pricing not established.</td>
+                            <td><span class="decision skip">No purchase before testing open-source</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Agent Roles -->
+            <section>
+                <h2>Agent Responsibilities</h2>
+                <p>Use the existing coding environment and assign bounded responsibilities. Do NOT assign an agent to each mesh or segment—numerical fitting belongs in the program, where reruns are reproducible.</p>
+
+                <div class="agent-card">
+                    <h4>💻 Implementation Agent</h4>
+                    <p>Loading, fitting code, CLI, output generation, and integration. Primary responsibility for building the pipeline.</p>
+                </div>
+
+                <div class="agent-card">
+                    <h4>🔍 Independent Geometry Reviewer</h4>
+                    <p>Cone/torus equations, parameter conventions, ambiguity, and rejection behavior. Provides mathematical verification of implementation.</p>
+                </div>
+
+                <div class="agent-card">
+                    <h4>✨ Optional Documentation Helper</h4>
+                    <p>Documentation or formatting based on already verified results. Low-priority support task.</p>
+                </div>
+            </section>
+
+            <!-- Model Allocation -->
+            <section>
+                <h2>Model Allocation Strategy</h2>
+                <div class="model-table-note">
+                    <strong>Note:</strong> These are current public API Standard short-context rates, <strong>not</strong> your known T3 Code or subscription charges. The allocation reflects judgment, not a benchmark showing these outperform every alternative.
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Model</th>
+                            <th>Proposed Role</th>
+                            <th>Input Cost (per 1M tokens)</th>
+                            <th>Output Cost (per 1M tokens)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="selection-col">GPT-6.1 Sol</td>
+                            <td>Main implementation</td>
+                            <td style="text-align: right;">$2</td>
+                            <td style="text-align: right;">$10</td>
+                        </tr>
+                        <tr>
+                            <td class="selection-col">GPT-6 Astra</td>
+                            <td>Bounded mathematical review & difficult failures</td>
+                            <td style="text-align: right;">$10</td>
+                            <td style="text-align: right;">$50</td>
+                        </tr>
+                        <tr>
+                            <td class="selection-col">GPT-6 Luna</td>
+                            <td>Simple support tasks when delegation is worthwhile</td>
+                            <td style="text-align: right;">$0.10</td>
+                            <td style="text-align: right;">$0.50</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Cost Control Strategies</h3>
+                <ul class="key-points">
+                    <li><strong>Keep geometry outside model context:</strong> Python reads arrays; agents receive compact residual and failure summaries</li>
+                    <li><strong>Run one reusable pipeline:</strong> Once built, standalone numerical runs consume <span class="highlight">zero LLM tokens</span></li>
+                    <li><strong>Limit delegation:</strong> One implementation agent and one focused reviewer should cover main work</li>
+                    <li><strong>Escalate specific failures:</strong> Give stronger model a problematic equation or diagnostic, not the whole project</li>
+                    <li><strong>Test early on known primitives:</strong> Catch initialization and parameter mistakes before tuning against the assignment</li>
+                    <li><strong>Keep visualization bound:</strong> Plotly HTML—no model involvement</li>
+                </ul>
+            </section>
+
+            <!-- Mathematical References -->
+            <section>
+                <h2>Mathematical References</h2>
+                <p>A particularly relevant reference for orthogonal-distance fitting of all five primitives (planes, spheres, cylinders, cones, and tori), including difficult partial patches:</p>
+                <ul class="key-points">
+                    <li><a href="https://nvlpubs.nist.gov/nistpubs/jres/103/6/j36sha.pdf" target="_blank">NIST Fitting Algorithms</a> – Complete fitting methodologies</li>
+                    <li><a href="https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html" target="_blank">SciPy least_squares</a> – Documented capabilities</li>
+                    <li><a href="https://plotly.com/python/3d-mesh/" target="_blank">Plotly 3D Mesh Rendering</a> – Interactive visualization</li>
+                    <li><a href="https://plotly.com/python/interactive-html-export/" target="_blank">Plotly Offline HTML Export</a> – Local file generation</li>
+                </ul>
+            </section>
+
+            <!-- Next Steps -->
+            <section>
+                <h2>Implementation Sequence</h2>
+                <ol class="key-points">
+                    <li>Set up Python 3.12 environment with <code>uv</code></li>
+                    <li>Implement JSON loading and NumPy geometry pipeline</li>
+                    <li>Build SciPy fitting framework for all five primitives</li>
+                    <li><span class="highlight">Time-boxed CGAL evaluation (30-45 min)</span></li>
+                    <li>Implement assignment-specific fit acceptance logic</li>
+                    <li>Build Plotly inspection and reporting</li>
+                    <li>Write pytest validation suite on known geometries</li>
+                    <li>Full dataset testing and refinement</li>
+                </ol>
+            </section>
+        </div>
+
+        <div class="footer">
+            <p>Research completed: 2026-09-30</p>
+            <p>This plan synthesizes compatibility, capability, and API reviews. Implementation follows in the next phase.</p>
+        </div>
+    </div>
+</body>
+</html>
