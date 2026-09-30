@@ -24,7 +24,8 @@ a narrow cone, ...). Candidates are walked from the fewest parameters to the mos
 and a more general one replaces the current choice only if it lowers the normal
 error clearly (`SIMPLICITY_MARGIN`), so the simplest adequate primitive wins.
 If no candidate is accepted the segment is `unresolved`, with the closest
-candidate kept for the fit report.
+candidate kept for the fit report; a general-quadric fit (`quadric.py`) then
+says whether the surface is an unsupported quadric (an ellipsoid, say) or freeform.
 
 `confidence` is a heuristic score in [0, 1], not a calibrated probability: for a
 primitive it grows with the position-residual margin and the evidence
@@ -42,6 +43,7 @@ from fitpipeline.geometry import InsufficientGeometryError, prepare_segment
 from fitpipeline.hypotheses import propose_hypotheses
 from fitpipeline.loader import SegmentRecord
 from fitpipeline.primitives import surface_distance
+from fitpipeline.quadric import fit_quadric
 from fitpipeline.refinement import Refinement, refine_hypothesis
 
 # Free parameters of each primitive's refinement chart; also its complexity rank.
@@ -183,6 +185,22 @@ def _describe(candidate: Candidate) -> str:
     )
 
 
+def _quadric_evidence(segment, position_tolerance: float) -> str:
+    """What a general-quadric fit says about a segment no supported primitive explains."""
+    quadric = fit_quadric(segment)
+    if quadric is None:
+        return ""
+    if quadric.relative_rms <= position_tolerance:
+        return (
+            f"; the vertices lie on {quadric.describe()} (vertex RMS {quadric.relative_rms:.1e} "
+            "of extent), a general quadric that is not a supported primitive"
+        )
+    return (
+        f"; no general quadric fits either (vertex RMS {quadric.relative_rms:.1e} of extent), "
+        "so the surface is treated as freeform"
+    )
+
+
 def _primitive_confidence(chosen: Candidate, rivals: list[Candidate], vertex_count: int) -> float:
     position_margin = float(np.clip(-np.log10(max(chosen.position_ratio, 1e-12)) / 3.0, 0.0, 1.0))
     dof = DEGREES_OF_FREEDOM[chosen.primitive_type]
@@ -207,7 +225,8 @@ def classify_segment(
 ) -> Classification:
     """Classify one segment; never raises for degenerate geometry (returns `unresolved`)."""
     try:
-        scale = prepare_segment(record).normalization.scale
+        segment = prepare_segment(record)
+        scale = segment.normalization.scale
         hypotheses = propose_hypotheses(record)
     except InsufficientGeometryError as error:
         return Classification("unresolved", None, 0.5, f"insufficient evidence: {error}", None)
@@ -245,7 +264,7 @@ def classify_segment(
                 f"no supported primitive explains the segment; closest is {_describe(closest)} "
                 f"(tolerance: vertex RMS {position_tolerance:.0e} of extent, normal RMS "
                 f"{np.degrees(normal_tolerance):.2f} deg)"
-            )
+            ) + _quadric_evidence(segment, position_tolerance)
             confidence = 0.5 + 0.45 * float(np.clip(np.log10(closest.violation) / 2.0, 0.0, 1.0))
         return Classification(
             "unresolved", None, round(confidence, 3), reason, closest, tuple(candidates),

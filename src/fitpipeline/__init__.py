@@ -8,6 +8,7 @@ from fitpipeline.geometry import (
 from fitpipeline.hypotheses import Hypothesis, propose_hypotheses
 from fitpipeline.loader import MeshData, SegmentRecord, load_all_meshes, load_mesh_segments
 from fitpipeline.predictions import build_predictions, validate_predictions, write_predictions
+from fitpipeline.quadric import QuadricFit, fit_quadric
 from fitpipeline.refinement import Refinement, refine_hypothesis, refine_segment
 
 __all__ = [
@@ -18,10 +19,12 @@ __all__ = [
     "MeshData",
     "NormalizedSegment",
     "Normalization",
+    "QuadricFit",
     "Refinement",
     "SegmentRecord",
     "build_predictions",
     "classify_segment",
+    "fit_quadric",
     "load_all_meshes",
     "load_mesh_segments",
     "prepare_segment",

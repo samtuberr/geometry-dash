@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
-"""Interactive inspection of segment hypotheses and residuals.
+"""Inspect one segment: its closed-form seeds per primitive type and the final decision.
 
-Usage:
-  python inspect.py mesh_02 0          # See segment 0 of mesh_02
-  python inspect.py mesh_03 0          # Cone frustum
-  python inspect.py mesh_08 0          # Torus
+Usage (from the repository root):
+  uv run python view.py mesh_02 0          # See segment 0 of mesh_02
+  uv run python view.py mesh_03 0          # Cone frustum
+  uv run python view.py mesh_08 0          # Torus
 """
 
 from pathlib import Path
 import sys
 import numpy as np
 
-from fitpipeline import load_mesh_segments, propose_hypotheses
+from fitpipeline import classify_segment, load_mesh_segments, propose_hypotheses
 
 
 def print_hypothesis(h, index):
@@ -75,6 +75,11 @@ def main():
     best = min(hypotheses, key=lambda h: h.relative_rms)
     print(f"\n  ★ Best fit by vertex residual: {best.primitive_type.upper()}")
     print(f"    (RMS: {best.relative_rms:.2e}, normal angle: {np.degrees(best.normal_rms_radians):.1f}°)")
+    print("    Seeds only; the decision below uses refined fits and both tolerances.")
+
+    result = classify_segment(record)
+    print(f"\n  Final decision: {result.primitive_type or 'unresolved'} (confidence {result.confidence})")
+    print(f"    {result.reason}")
     print()
 
 

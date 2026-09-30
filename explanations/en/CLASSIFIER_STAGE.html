@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classifier stage - the final decision</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        main {
+            padding: 40px;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #11998e;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #11998e;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #38ef7d;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #0d7377;
+        }
+        p, li {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+        ul, ol {
+            margin-left: 30px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #11998e;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            direction: ltr;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #11998e22 0%, #38ef7d22 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #11998e;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #ffc107;
+        }
+        .success {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #dc3545;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            direction: ltr;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .formula {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .diagram {
+            background: #f0f0f0;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: monospace;
+            direction: ltr;
+            white-space: pre;
+            line-height: 1.4;
+        }
+        .flow-step {
+            display: inline-block;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .flow-arrow {
+            display: inline-block;
+            color: #11998e;
+            font-size: 1.5em;
+            margin: 0 10px;
+        }
+        .metric-box {
+            display: inline-block;
+            background: #fff;
+            border: 2px solid #11998e;
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin: 10px;
+            text-align: center;
+        }
+        .metric-box .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #11998e;
+        }
+        .metric-box .label {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 The classifier stage</h1>
+            <p>The final decision: a supported primitive, or unresolved?</p>
+        </header>
+
+        <main>
+            <section>
+                <h2>📋 What does this stage do?</h2>
+                <p>
+                    This stage takes all the refined candidates from <code>refinement.py</code> and decides:
+                </p>
+                <ul>
+                    <li><strong>Which primitive type?</strong> plane, cylinder, cone, sphere, torus</li>
+                    <li><strong>Or does nothing fit?</strong> unresolved (freeform, unsupported, poor fit)</li>
+                    <li><strong>How sure are we?</strong> a confidence score between 0 and 1</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>💡 Guiding principle:</strong> a candidate is accepted only if it meets every criterion.
+                    If several candidates pass, the simplest one wins, unless a more complex candidate explains the normals much better.
+                </div>
+            </section>
+
+            <section>
+                <h2>🔄 The decision flow</h2>
+                <div style="text-align: center; padding: 20px;">
+                    <span class="flow-step">Step 1: compute the normal tolerance</span>
+                    <span class="flow-arrow">→</span>
+                    <span class="flow-step">Step 2: evaluate every candidate</span>
+                    <span class="flow-arrow">→</span>
+                    <span class="flow-step">Step 3: keep the ones that pass</span>
+                    <span class="flow-arrow">→</span>
+                    <span class="flow-step">Step 4: choose the winner</span>
+                </div>
+
+                <div class="diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                     For every segment:                          │
+│  ┌──────────────┐                                               │
+│  │ Refinements  │ ──► plane, cylinder, cone, sphere, torus      │
+│  └──────────────┘     (whatever could be computed)              │
+│         │                                                       │
+│         ▼                                                       │
+│  ┌──────────────────────────────────────────┐                   │
+│  │ Check every candidate:                   │                   │
+│  │  • vertex residuals ≤ tolerance?         │                   │
+│  │  • normal residuals ≤ tolerance?         │                   │
+│  │  • enough vertices?                      │                   │
+│  │  • plausible radius?                     │                   │
+│  └──────────────────────────────────────────┘                   │
+│         │                                                       │
+│    ┌────┴────┐                                                  │
+│    ▼         ▼                                                  │
+│ [pass]    [fail]                                                │
+│    │         │                                                  │
+│    ▼         ▼                                                  │
+│ choose    if nothing passes                                     │
+│ the         ─► unresolved                                       │
+│ simplest    (keep the closest one for the report,               │
+│              then run the quadric diagnostic)                   │
+└─────────────────────────────────────────────────────────────────┘
+                </div>
+            </section>
+
+            <section>
+                <h2>📏 The acceptance criteria</h2>
+
+                <h3>1. Position residuals</h3>
+                <p>Every vertex must be close to the candidate surface:</p>
+                <div class="formula">
+                    RMS(distances) / scale ≤ 0.001  <br>
+                    MAX(distance) / scale ≤ 0.01
+                </div>
+                <p>
+                    Here <code>scale</code> is the RMS distance from the centre, a typical size of the segment.
+                    So the average deviation must be less than a thousandth of the segment's size.
+                </p>
+
+                <h3>2. Normal residuals</h3>
+                <div class="warning">
+                    <strong>⚠️ Why are normals necessary?</strong><br>
+                    Vertices alone are not enough! Two rings of a coarse cylinder also lie exactly on a sphere.
+                    Only the normals tell them apart.
+                </div>
+
+                <p>The angle between the facet normal and the surface normal must be small:</p>
+                <div class="formula">
+                    RMS(angles) ≤ normal_tolerance
+                </div>
+
+                <p><strong>What is the tolerance?</strong> It depends on the segment's tessellation:</p>
+                <div class="formula">
+                    normal_tolerance = max(0.5°, 0.5 × max_dihedral_angle)
+                </div>
+
+                <p>
+                    <code>max_dihedral_angle</code> is the largest angle between the normals of two triangles that share an edge.
+                    On a cylinder with 32 sides the dihedral angle is 11.25°, so the tolerance is 5.6°.
+                    This avoids rejecting legitimate primitives just because their tessellation is coarse.
+                </p>
+
+                <h3>3. Minimum number of vertices</h3>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Degrees of freedom</th>
+                        <th>Minimum vertices</th>
+                    </tr>
+                    <tr><td>plane</td><td>3</td><td>3 (no extra requirement)</td></tr>
+                    <tr><td>sphere</td><td>4</td><td>7</td></tr>
+                    <tr><td>cylinder</td><td>5</td><td>8</td></tr>
+                    <tr><td>cone</td><td>6</td><td>9</td></tr>
+                    <tr><td>torus</td><td>7</td><td>10</td></tr>
+                </table>
+                <p>The reason: a fit is only meaningful with more measurements (vertices) than parameters.</p>
+
+                <h3>4. Plausible radius</h3>
+                <div class="formula">
+                    radius ≤ 1000 × scale
+                </div>
+                <p>
+                    A "sphere" whose radius is a million times the segment's size is really a plane.
+                    If the radius is too large, the candidate is rejected.
+                </p>
+            </section>
+
+            <section>
+                <h2>🏆 Choosing the winner: simplicity wins</h2>
+
+                <p>If several candidates pass every criterion, how do we choose?</p>
+
+                <div class="highlight">
+                    <strong>Basic rule:</strong> the simplest wins!<br>
+                    plane &lt; sphere &lt; cylinder &lt; cone &lt; torus
+                </div>
+
+                <p>
+                    A plane is always preferred to a sphere (a plane is a sphere with infinite radius).
+                    A cylinder is preferred to a cone (a cylinder is a cone with a zero angle).
+                </p>
+
+                <h3>Exception: a more complex candidate that explains the data better</h3>
+                <p>A more complex candidate replaces the simpler one only if:</p>
+                <div class="formula">
+                    complex.normal_error &lt; 0.8 × simple.normal_error<br>
+                    AND<br>
+                    improvement &gt; 0.005°
+                </div>
+                <p>
+                    That is: it must reduce the normal error by at least 20% and also by at least 0.005 degrees.
+                </p>
+
+                <h3>Who counts as a "rival" and who does not?</h3>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Contains as a limit case</th>
+                        <th>Not a real rival</th>
+                    </tr>
+                    <tr><td>plane</td><td>—</td><td>sphere, cylinder, cone, torus</td></tr>
+                    <tr><td>sphere</td><td>plane (r→∞)</td><td>torus</td></tr>
+                    <tr><td>cylinder</td><td>plane (r→∞)</td><td>cone, torus</td></tr>
+                    <tr><td>cone</td><td>plane, cylinder</td><td>—</td></tr>
+                    <tr><td>torus</td><td>sphere, cylinder</td><td>—</td></tr>
+                </table>
+                <p>
+                    When a cylinder passes, a cone probably passes too (with an angle close to zero).
+                    That is not a real rival, because it is the same surface.
+                </p>
+            </section>
+
+            <section>
+                <h2>🥚 Quadric diagnostic for rejected segments</h2>
+                <p>
+                    When no candidate is accepted, the segment is <code>unresolved</code>. So that the reason explains <em>what</em> the surface is,
+                    <code>quadric.py</code> fits a general quadric to the vertices:
+                </p>
+                <div class="formula">
+                    xᵀ A x + b · x + d = 0   (10 coefficients, the smallest singular vector)
+                </div>
+                <p>
+                    The fit is scored by the Sampson distance |Q(x)| / |∇Q(x)|, a first-order approximation of the geometric distance.
+                    It is therefore in the same relative units as the primitive residuals and is checked against the same tolerance (1e-3).
+                </p>
+                <ul>
+                    <li><strong>The quadric fits:</strong> the eigenvalues of A give its kind (ellipsoid, hyperboloid of one or two sheets, non-central quadric). For an ellipsoid the semi-axes and the centre are reported too.</li>
+                    <li><strong>No quadric fits:</strong> the reason says the surface is freeform.</li>
+                </ul>
+                <div class="warning">
+                    <strong>⚠️ The diagnostic only explains.</strong> It never turns a segment into a primitive, because arbitrary quadrics are outside the types the assignment supports.
+                </div>
+            </section>
+
+            <section>
+                <h2>📊 Computing the confidence</h2>
+
+                <div class="warning">
+                    <strong>⚠️ This is not a probability!</strong><br>
+                    The confidence is a heuristic score between 0 and 1, not a calibrated probability.
+                </div>
+
+                <h3>For an accepted primitive:</h3>
+                <div class="code-block">
+confidence = position_margin × evidence × separation
+
+position_margin = clip(-log10(position_ratio) / 3, 0, 1)
+    (position_ratio = the worst position residual divided by its tolerance)
+    • position_ratio ≤ 1e-3  →  margin = 1.0 (the residual is at least 1000× below the tolerance)
+    • position_ratio = 1     →  margin = 0.0 (exactly at the tolerance)
+
+evidence = min(1, (vertex_count - dof) / (2 × dof))
+    • plane with 4 vertices     →  evidence = 1.0
+    • cylinder with 8 vertices  →  evidence = 0.3
+    • cylinder with 15 vertices →  evidence = 1.0
+
+separation = min over rivals of: 1 - (my_normal_error / rival_normal_error)
+    • no rivals                    →  separation = 1.0
+    • a rival with the same error  →  separation = 0.0
+                </div>
+
+                <p>The full formula:</p>
+                <div class="formula">
+                    (0.6 + 0.39 × position_margin) × (0.5 + 0.5 × evidence) × (0.6 + 0.4 × separation)
+                </div>
+                <p>The possible range: 0.18 to 0.99</p>
+
+                <h3>For unresolved:</h3>
+                <div class="code-block">
+confidence = 0.5 + 0.45 × clip(log10(violation) / 2, 0, 1)
+
+violation = max(position_ratio, normal_ratio)
+    • violation = 10  →  confidence ≈ 0.73
+    • violation = 100 →  confidence ≈ 0.95
+                </div>
+                <p>
+                    The further the closest candidate is from its tolerance, the surer we are that the segment really is not a primitive.
+                </p>
+            </section>
+
+            <section>
+                <h2>📈 Results on the dataset</h2>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <div class="metric-box">
+                        <div class="value">33</div>
+                        <div class="label">plane</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">5</div>
+                        <div class="label">cylinder</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">1</div>
+                        <div class="label">cone</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">1</div>
+                        <div class="label">sphere</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">1</div>
+                        <div class="label">torus</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">2</div>
+                        <div class="label">unresolved</div>
+                    </div>
+                </div>
+
+                <h3>Interesting cases:</h3>
+
+                <div class="success">
+                    <strong>✅ mesh_05 seg 0 and seg 1: a coarse cylinder (only two rings)</strong><br>
+                    The vertices also lie on a sphere (relative_rms ≈ 1.7e-8 for both).<br>
+                    But the sphere's normal error is 3.0° and 5.1°, against 1.88° for the cylinder.<br>
+                    The cylinder wins on the normals, but the confidence drops to 0.75 and 0.84 because there is a rival.
+                </div>
+
+                <div class="error">
+                    <strong>❌ mesh_09 seg 0: an ellipsoid</strong><br>
+                    The closest candidate: a cylinder with vertex RMS = 18% of the segment's size.<br>
+                    The tolerance is 0.1%, so it misses by a factor of 180.<br>
+                    The quadric diagnostic shows the vertices lie on an ellipsoid with semi-axes 4, 2.5, 1.5 (residual 2.7e-8), which is an unsupported quadric.<br>
+                    Result: unresolved with confidence = 0.95 (we are sure it is not a supported primitive).
+                </div>
+
+                <div class="error">
+                    <strong>❌ mesh_10 seg 1: a freeform surface</strong><br>
+                    The closest candidate: a cone with vertex RMS = 11% and normals off by 22°.<br>
+                    No primitive fits, and no general quadric either (residual 30%).<br>
+                    Result: unresolved.
+                </div>
+            </section>
+
+            <section>
+                <h2>🔧 API</h2>
+
+                <div class="code-block">
+from fitpipeline import classify_segment, load_mesh_segments
+
+mesh = load_mesh_segments("assignment/data", "mesh_02")
+record = mesh.segments[0]  # the cylinder
+
+result = classify_segment(record)
+
+print(result.kind)           # "primitive"
+print(result.primitive_type) # "cylinder"
+print(result.confidence)     # 0.99
+print(result.reason)         # "cylinder: vertex RMS 9.6e-09..."
+print(result.best)           # the chosen Candidate
+print(result.candidates)     # every candidate that was evaluated
+                </div>
+
+                <h3>The Classification structure:</h3>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                    <tr><td>kind</td><td>str</td><td>"primitive" or "unresolved"</td></tr>
+                    <tr><td>primitive_type</td><td>str | None</td><td>plane/cylinder/cone/sphere/torus or None</td></tr>
+                    <tr><td>confidence</td><td>float</td><td>0.0 to 1.0</td></tr>
+                    <tr><td>reason</td><td>str</td><td>a short explanation of the decision</td></tr>
+                    <tr><td>best</td><td>Candidate</td><td>the chosen candidate (or the closest one)</td></tr>
+                    <tr><td>candidates</td><td>tuple</td><td>every candidate that was evaluated</td></tr>
+                    <tr><td>scale</td><td>float</td><td>the segment's size (RMS extent)</td></tr>
+                    <tr><td>normal_tolerance_radians</td><td>float</td><td>the computed normal tolerance</td></tr>
+                </table>
+            </section>
+
+            <section>
+                <h2>📝 predictions.json</h2>
+
+                <p>The CLI writes a predictions.json file with one entry per segment:</p>
+
+                <div class="code-block">
+python -m fitpipeline assignment/data predictions.json
+# 43 segments: cone 1, cylinder 5, plane 33, sphere 1, torus 1, unresolved 2 -> predictions.json in 2.3s
+                </div>
+
+                <p>An example cylinder entry:</p>
+                <div class="code-block">
+{
+  "mesh_id": "mesh_02",
+  "segment_id": 0,
+  "kind": "primitive",
+  "primitive_type": "cylinder",
+  "confidence": 0.99,
+  "reason": "cylinder: vertex RMS 9.6e-09 of extent, normal RMS 1.88 deg",
+  "fit": {
+    "status": "fitted",
+    "parameters": {
+      "axis_point": [0, 0, 0],
+      "axis_direction": [0, 0, 1],
+      "radius": 2.0
+    },
+    "notes": "scipy least_squares ... Converged after 1 residual evaluations.",
+    "residual": {
+      "vertex_rms_distance": 3.47e-08,
+      "facet_normal_rms_degrees": 1.88
+    }
+  }
+}
+                </div>
+
+                <p>An example unresolved entry:</p>
+                <div class="code-block">
+{
+  "mesh_id": "mesh_09",
+  "segment_id": 0,
+  "kind": "unresolved",
+  "primitive_type": null,
+  "confidence": 0.95,
+  "reason": "no supported primitive explains the segment; closest is cylinder ...; the vertices lie on an ellipsoid with semi-axes 4, 2.5, 1.5 ...",
+  "fit": {
+    "status": "failed",
+    "parameters": null,   // withheld because they do not follow the geometry
+    "notes": "Attempted cylinder, revised to unresolved..."
+  }
+}
+                </div>
+            </section>
+
+            <section>
+                <h2>🧪 Tests</h2>
+
+                <p>43 tests (counting parametrized runs) in <code>tests/test_classifier.py</code> and <code>tests/test_predictions.py</code>, including 4 for the quadric diagnostic:</p>
+
+                <ul>
+                    <li>known primitives are classified correctly under every pose (rotation, scale, translation)</li>
+                    <li>a freeform (bumpy) surface is rejected as unresolved, and its reason says no quadric fits</li>
+                    <li>an ellipsoid patch is rejected as unresolved, with its semi-axes named in the reason (under every pose)</li>
+                    <li>a coarse cylinder is not classified as a sphere</li>
+                    <li>a sphere with a bump is rejected</li>
+                    <li>a single triangle = a plane with lower confidence</li>
+                    <li>a zero-area segment = unresolved, without an exception</li>
+                    <li>the confidence does not change with the pose</li>
+                    <li>predictions.json is valid and deterministic</li>
+                </ul>
+
+                <div class="code-block">
+uv run pytest tests/test_classifier.py tests/test_predictions.py -v
+# 43 passed
+                </div>
+            </section>
+
+            <section>
+                <h2>📚 Summary</h2>
+
+                <table>
+                    <tr>
+                        <th>File</th>
+                        <th>Role</th>
+                    </tr>
+                    <tr>
+                        <td><code>classifier.py</code></td>
+                        <td>the decision: primitive or unresolved, plus confidence</td>
+                    </tr>
+                    <tr>
+                        <td><code>quadric.py</code></td>
+                        <td>diagnostic: is a rejected segment an unsupported quadric or freeform?</td>
+                    </tr>
+                    <tr>
+                        <td><code>predictions.py</code></td>
+                        <td>builds predictions.json with fit/residual/notes</td>
+                    </tr>
+                    <tr>
+                        <td><code>__main__.py</code></td>
+                        <td>CLI: python -m fitpipeline data/ output.json</td>
+                    </tr>
+                </table>
+
+                <div class="highlight">
+                    <strong>🎯 The bottom line:</strong><br>
+                    The criteria ensure that only good fits are accepted.<br>
+                    The normals separate primitives that the vertices cannot.<br>
+                    The simplest type wins, and the confidence reflects the quality of the decision.
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

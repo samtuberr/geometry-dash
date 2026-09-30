@@ -206,7 +206,7 @@
         <div class="file-box">
             <div class="file-name">5. .gitignore</div>
             <div class="description">
-                כדי לא לדחוף את .venv, __pycache__, predictions.json ל-git
+                כדי לא לדחוף את .venv ו-__pycache__ ל-git. (בהתחלה גם predictions.json הוחרג, אבל הוא תוצר חובה של המשימה, ולכן הוא נמצא עכשיו ב-repository.)
             </div>
         </div>
 
@@ -248,9 +248,9 @@
 
         <h2>✓ איך לבדוק שהלודר עובד</h2>
 
-        <h3>1. הרצת כל הטסטים:</h3>
+        <h3>1. הרצת הטסטים של הלודר:</h3>
         <div class="code-block">cd /root/geometry-dash
-uv run pytest -q</div>
+uv run pytest -q tests/test_loader.py</div>
         <p>צפויה תוצאה: <span class="highlight">34 passed</span></p>
 
         <h3>2. בדיקה ידנית על mesh_06:</h3>
@@ -338,7 +338,7 @@ Segment 3: 16 triangles, 18 points, area=20.0
 Segment 4: 64 triangles, 64 points, area=25.09
 Segment 5: 64 triangles, 64 points, area=87.51
 Segment 6: 64 triangles, 64 points, area=87.51</div>
-        <p>✓ סגמנטים 0-3 הם קטנים (כנראה מישורים) | סגמנטים 4-6 גדולים יותר (כנראה מעוקלים)</p>
+        <p>✓ סגמנטים 0-3 הם ארבע הפאות הצדדיות (מישורים). סגמנט 4 הוא הדופן הגלילית (רדיוס 2), וסגמנטים 5-6 הם המכסים השטוחים העליון והתחתון. השטח הגדול לבדו לא אומר שמשטח מעוקל: הסיווג הסופי נקבע רק לפי השאריות.</p>
 
         <h2>🎯 Feature 1 של MVP Spec ✓</h2>
         <p>לפי ה-MVP_SPEC.md, Feature 1 הוא:</p>

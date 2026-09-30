@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מושגים בגיאומטריה - קודקודים, משולשים וסגמנטים</title>
+    <title>Geometry concepts: vertices, triangles and segments</title>
     <style>
         * {
             margin: 0;
@@ -38,7 +38,7 @@
             padding: 30px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             border-radius: 10px;
-            border-right: 5px solid #2a5298;
+            border-left: 5px solid #2a5298;
         }
         .concept h2 {
             color: #1e3c72;
@@ -82,7 +82,7 @@
         .formula {
             background: #f0f0f0;
             padding: 12px;
-            border-right: 3px solid #2a5298;
+            border-left: 3px solid #2a5298;
             margin: 10px 0;
             border-radius: 5px;
             font-family: 'Courier New', monospace;
@@ -92,7 +92,7 @@
         .example {
             background: #e7f3ff;
             padding: 15px;
-            border-right: 3px solid #0099ff;
+            border-left: 3px solid #0099ff;
             margin: 10px 0;
             border-radius: 5px;
             color: #004085;
@@ -114,13 +114,13 @@
             background: #2a5298;
             color: white;
             padding: 15px;
-            text-align: right;
+            text-align: left;
             font-weight: bold;
         }
         .comparison-table td {
             padding: 15px;
             border-bottom: 1px solid #ddd;
-            text-align: right;
+            text-align: left;
         }
         .comparison-table tr:hover {
             background: #f9f9f9;
@@ -154,12 +154,12 @@
             flex-shrink: 0;
         }
         .flow-text {
-            margin-right: 15px;
+            margin-left: 15px;
             flex: 1;
         }
         .real-example {
             background: #e8f5e9;
-            border-right: 5px solid #4caf50;
+            border-left: 5px solid #4caf50;
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
@@ -170,7 +170,7 @@
         }
         .math-box {
             background: #fff8e1;
-            border-right: 5px solid #fbc02d;
+            border-left: 5px solid #fbc02d;
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
@@ -201,22 +201,22 @@
 </head>
 <body>
     <div class="container">
-        <h1>🔷 מושגים בגיאומטריה: מה זה?</h1>
+        <h1>🔷 Geometry concepts: what are they?</h1>
 
         <!-- 1. Vertex -->
         <div class="concept">
-            <h2><span class="emoji">🔴</span> קודקוד (Vertex)</h2>
+            <h2><span class="emoji">🔴</span> Vertex</h2>
             <div class="concept-content">
                 <div class="concept-text">
-                    <p>קודקוד היא <strong>נקודה בחלל תלת-מימדי</strong>. בדיוק כמו שסימנת נקודה בגרף מתמטיקה.</p>
-                    <p>כל קודקוד מתואר על ידי <span class="highlight">שלוש קואורדינטות: X, Y, Z</span></p>
+                    <p>A vertex is <strong>a point in 3D space</strong>, just like a point you mark on a graph in maths.</p>
+                    <p>Each vertex is described by <span class="highlight">three coordinates: X, Y, Z</span></p>
                     <div class="example">
-                        <strong>דוגמה:</strong><br>
+                        <strong>Example:</strong><br>
                         Vertex A = (0, 0, 0)<br>
                         Vertex B = (30, 0, 0)<br>
                         Vertex C = (15, 26, 0)
                     </div>
-                    <p>במש שלנו יש <strong>מאות או אלפי קודקודים</strong> המרכיבים את הצורה.</p>
+                    <p>Our meshes have <strong>hundreds or thousands of vertices</strong> that make up the shape.</p>
                 </div>
                 <div class="concept-visual">
                     <svg viewBox="0 0 200 200">
@@ -228,7 +228,7 @@
                         </g>
                         <!-- Axes -->
                         <line x1="100" y1="100" x2="180" y2="100" stroke="#ff6b6b" stroke-width="2"/>
-                        <text x="185" y="105" font-size="12" fill="#ff6b6b" direction="ltr">X</text>
+                        <text x="185" y="105" font-size="12" fill="#ff6b6b">X</text>
                         <line x1="100" y1="100" x2="100" y2="20" stroke="#4ecdc4" stroke-width="2"/>
                         <text x="85" y="15" font-size="12" fill="#4ecdc4">Z</text>
                         <!-- Points -->
@@ -245,17 +245,17 @@
 
         <!-- 2. Triangle -->
         <div class="concept">
-            <h2><span class="emoji">△</span> משולש (Triangle)</h2>
+            <h2><span class="emoji">△</span> Triangle</h2>
             <div class="concept-content">
                 <div class="concept-text">
-                    <p>משולש הוא <strong>שלוש קודקודים המחוברים</strong>. זו היחידה הבסיסית בנו מורכב כל מש.</p>
-                    <p>כל משולש מוגדר על ידי <span class="highlight">שלוש אינדקסים לקודקודים</span></p>
+                    <p>A triangle is <strong>three connected vertices</strong>. It is the basic unit every mesh is built from.</p>
+                    <p>Each triangle is defined by <span class="highlight">three vertex indices</span></p>
                     <div class="example">
-                        <strong>דוגמה:</strong><br>
+                        <strong>Example:</strong><br>
                         Triangle #5 = (vertex 2, vertex 5, vertex 8)<br>
-                        כלומר: חבר את קודקוד #2, #5 ו-#8
+                        that is: connect vertices #2, #5 and #8
                     </div>
-                    <p>כל משולש הוא חתיכה קטנה של הפנים של ישם 3D. אלפים של משולשים קטנים יוצרים מש שלם.</p>
+                    <p>Each triangle is a small piece of the surface of a 3D object. Thousands of small triangles make a whole mesh.</p>
                 </div>
                 <div class="concept-visual">
                     <svg viewBox="0 0 200 200">
@@ -285,20 +285,20 @@
 
         <!-- 3. Mesh -->
         <div class="concept">
-            <h2><span class="emoji">🎯</span> מש (Mesh)</h2>
+            <h2><span class="emoji">🎯</span> Mesh</h2>
             <div class="concept-content">
                 <div class="concept-text">
-                    <p>מש הוא <strong>קבוצה של משולשים</strong> המרכיבים יחד צורה תלת-מימדית.</p>
-                    <p>מש מורכב מ:</p>
+                    <p>A mesh is <strong>a set of triangles</strong> that together make up a 3D shape.</p>
+                    <p>A mesh consists of:</p>
                     <ul style="margin: 10px 0 10px 20px; line-height: 1.8;">
-                        <li><span class="highlight">Vertices array</span> — רשימת כל הקודקודים</li>
-                        <li><span class="highlight">Triangles array</span> — רשימת כל המשולשים (כל אחד הוא 3 אינדקסים)</li>
+                        <li><span class="highlight">Vertices array</span>: the list of all vertices</li>
+                        <li><span class="highlight">Triangles array</span>: the list of all triangles (each one is 3 indices)</li>
                     </ul>
                     <div class="example">
-                        <strong>דוגמה - מש קטן:</strong><br>
+                        <strong>Example: a small mesh</strong><br>
                         Vertices: [(0,0,0), (1,0,0), (0,1,0), (1,1,0)]<br>
                         Triangles: [(0,1,2), (1,3,2)]<br>
-                        → 2 משולשים עם 4 קודקודים
+                        → 2 triangles with 4 vertices
                     </div>
                 </div>
                 <div class="concept-visual">
@@ -331,20 +331,20 @@
 
         <!-- 4. Segment -->
         <div class="concept">
-            <h2><span class="emoji">🎨</span> סגמנט (Segment)</h2>
+            <h2><span class="emoji">🎨</span> Segment</h2>
             <div class="concept-content">
                 <div class="concept-text">
-                    <p>סגמנט היא <strong>קבוצת משולשים הקשורים זה לזה</strong> שמהווים חלק משמעותי מהמש.</p>
-                    <p>כל משולש ממש שלם מקבל מספר סגמנט (0, 1, 2, ...) שמסביר לאיזו אזור הוא שייך.</p>
+                    <p>A segment is <strong>a group of connected triangles</strong> that forms a meaningful part of the mesh.</p>
+                    <p>Every triangle of a whole mesh gets a segment number (0, 1, 2, ...) that says which region it belongs to.</p>
                     <div class="example">
-                        <strong>דוגמה - סעיף צילינדר:</strong><br>
+                        <strong>Example: a cylinder section</strong><br>
                         Triangle 0: segment 1<br>
                         Triangle 1: segment 1<br>
                         Triangle 2: segment 1<br>
-                        Triangle 3: segment 2 (קבוצה שונה)<br>
-                        → משולשים 0-2 יוצרים segment 1
+                        Triangle 3: segment 2 (a different group)<br>
+                        → triangles 0-2 form segment 1
                     </div>
-                    <p>סגמנטים משמשים להפרדת חלקים שונים של הצורה (גליל, קוביה, כדור וכו').</p>
+                    <p>Segments separate the different parts of a shape (a cylinder wall, a flat face, a sphere, and so on).</p>
                 </div>
                 <div class="concept-visual">
                     <svg viewBox="0 0 200 200">
@@ -362,7 +362,7 @@
 
                         <!-- Border -->
                         <rect x="30" y="20" width="130" height="160" fill="none" stroke="#999" stroke-width="1" stroke-dasharray="5"/>
-                        <text x="35" y="190" font-size="12" fill="#999">Mesh שלם</text>
+                        <text x="35" y="190" font-size="12" fill="#999">Whole mesh</text>
                     </svg>
                 </div>
             </div>
@@ -370,24 +370,24 @@
 
         <!-- 5. Normal Vector -->
         <div class="concept">
-            <h2><span class="emoji">➡️</span> וקטור נורמל (Normal Vector)</h2>
+            <h2><span class="emoji">➡️</span> Normal vector</h2>
             <div class="concept-content">
                 <div class="concept-text">
-                    <p>נורמל היא <strong>וקטור מאונך למישור המשולש</strong>. היא "מצביעה" לאן ה"חוץ" של הפנים.</p>
-                    <p>כל נורמל הוא <span class="highlight">וקטור יחידה</span> (אורך = 1) בכיוון מסוים.</p>
+                    <p>A normal is <strong>a vector perpendicular to the triangle's plane</strong>. It "points" to the outside of the face.</p>
+                    <p>Each normal is a <span class="highlight">unit vector</span> (length = 1) in some direction.</p>
                     <div class="formula">
 Normal = (B - A) × (C - A)<br/>
-(Cross product של שני צדי המשולש)
+(the cross product of two triangle edges, then scaled to length 1)
                     </div>
                     <div class="example">
-                        <strong>דוגמה:</strong><br>
-                        משולש שטוח במישור XY<br>
-                        Normal = [0, 0, 1] (מצביע "למעלה")<br>
+                        <strong>Example:</strong><br>
+                        A flat triangle in the XY plane<br>
+                        Normal = [0, 0, 1] (points "up")<br>
                         <br>
-                        משולש שטוח במישור XZ<br>
-                        Normal = [0, 1, 0] (מצביע "קדימה")
+                        A flat triangle in the XZ plane<br>
+                        Normal = [0, 1, 0] (points "forward")
                     </div>
-                    <p>נורמלים עוזרים לנו להבין את <strong>הכיוונונות</strong> של הפנים.</p>
+                    <p>Normals tell us the <strong>orientation</strong> of the surface.</p>
                 </div>
                 <div class="concept-visual">
                     <svg viewBox="0 0 200 200">
@@ -422,22 +422,22 @@ Normal = (B - A) × (C - A)<br/>
 
         <!-- 6. Area -->
         <div class="concept">
-            <h2><span class="emoji">📏</span> שטח (Area)</h2>
+            <h2><span class="emoji">📏</span> Area</h2>
             <div class="concept-content">
                 <div class="concept-text">
-                    <p>שטח היא <strong>הגודל של המשולש</strong> — כמה מקום הוא תופס במרחב.</p>
-                    <p>שטח משולש בחלל תלת-מימדי מחושב כך:</p>
+                    <p>Area is <strong>the size of the triangle</strong>: how much surface it covers.</p>
+                    <p>The area of a triangle in 3D space is computed like this:</p>
                     <div class="formula">
 Area = 0.5 × ||(B - A) × (C - A)||<br/>
-= חצי מהאורך של cross product
+= half the length of the cross product
                     </div>
                     <div class="example">
-                        <strong>דוגמה בממדים 2:</strong><br>
+                        <strong>Example in 2D:</strong><br>
                         Triangle: A=(0,0), B=(4,0), C=(0,3)<br>
                         Base = 4, Height = 3<br>
                         Area = 0.5 × 4 × 3 = 6
                     </div>
-                    <p>סגמנט עם שטח גדול פירושו הוא מכיל הרבה משולשים או משולשים גדולים.</p>
+                    <p>A segment with a large area contains many triangles, or large ones.</p>
                 </div>
                 <div class="concept-visual">
                     <svg viewBox="0 0 200 200">
@@ -464,55 +464,55 @@ Area = 0.5 × ||(B - A) × (C - A)||<br/>
 
         <!-- Process Flow -->
         <div class="flow">
-            <h3 style="color: #1e3c72; margin-bottom: 20px;">🔄 איך הלודר שלנו עובד</h3>
+            <h3 style="color: #1e3c72; margin-bottom: 20px;">🔄 How our loader works</h3>
             <div class="flow-step">
                 <div class="flow-number">1</div>
                 <div class="flow-text">
-                    <strong>קרא Vertices</strong><br>
-                    טוען את רשימת כל הקודקודים מ-mesh.json
+                    <strong>Read vertices</strong><br>
+                    Loads the list of all vertices from mesh.json
                 </div>
             </div>
             <div class="flow-step">
                 <div class="flow-number">2</div>
                 <div class="flow-text">
-                    <strong>קרא Triangles</strong><br>
-                    טוען את רשימת כל המשולשים (מי מחובר למי)
+                    <strong>Read triangles</strong><br>
+                    Loads the list of all triangles (which vertices are connected)
                 </div>
             </div>
             <div class="flow-step">
                 <div class="flow-number">3</div>
                 <div class="flow-text">
-                    <strong>קרא Segments</strong><br>
-                    קורא מ-segments.json איזה משולש שייך לאיזה סגמנט
+                    <strong>Read segments</strong><br>
+                    Reads from segments.json which triangle belongs to which segment
                 </div>
             </div>
             <div class="flow-step">
                 <div class="flow-number">4</div>
                 <div class="flow-text">
-                    <strong>קבץ לפי סגמנט</strong><br>
-                    מקבץ משולשים שנמצאים באותו סגמנט
+                    <strong>Group by segment</strong><br>
+                    Groups the triangles that are in the same segment
                 </div>
             </div>
             <div class="flow-step">
                 <div class="flow-number">5</div>
                 <div class="flow-text">
-                    <strong>חשב גיאומטריה</strong><br>
-                    לכל משולש: חשב שטח וגם נורמל (וקטור מאונך)
+                    <strong>Compute geometry</strong><br>
+                    For every triangle: compute its area and its normal (perpendicular vector)
                 </div>
             </div>
             <div class="flow-step">
                 <div class="flow-number">6</div>
                 <div class="flow-text">
-                    <strong>החזר NumPy arrays</strong><br>
-                    מחזיר מערכי NumPy שמוכנים לפיטינג וסיווג
+                    <strong>Return NumPy arrays</strong><br>
+                    Returns NumPy arrays that are ready for fitting and classification
                 </div>
             </div>
         </div>
 
         <!-- Real World Example -->
         <div class="real-example">
-            <h3>🌍 דוגמה מהחיים: קוביה פשוטה</h3>
-            <p><strong>קוביה עם 8 קודקודים ו-12 משולשים:</strong></p>
+            <h3>🌍 A real example: a simple cube</h3>
+            <p><strong>A cube with 8 vertices and 12 triangles:</strong></p>
             <div class="math-box">
 Vertices:
   v0 = (0, 0, 0)
@@ -524,67 +524,68 @@ Vertices:
   v6 = (1, 1, 1)
   v7 = (0, 1, 1)
 
-Triangles (פנים שטוח):
-  Face 1: (0, 1, 2), (0, 2, 3)  → 2 משולשים
-  Face 2: (4, 5, 6), (4, 6, 7)  → 2 משולשים
-  ... (4 פנים נוספות)
+Triangles (flat faces):
+  Face 1: (0, 1, 2), (0, 2, 3)  → 2 triangles
+  Face 2: (4, 5, 6), (4, 6, 7)  → 2 triangles
+  ... (4 more faces)
 
 Segments:
-  All 12 triangles → Segment 0 (כולם קוביה אחת)
+  Face 1 → Segment 0, Face 2 → Segment 1, ... (6 segments, one per face)
             </div>
-            <p>✓ כל משולש: 3 קודקודים | כל פנים שטוח: 2 משולשים | כל קוביה: 12 משולשים</p>
+            <p>✓ Every triangle: 3 vertices | every flat face: 2 triangles | the whole cube: 12 triangles</p>
+            <p>The supplied segmentation grows a region only across edges where the angle between the normals is below 30°. At the edges of a cube the angle is 90°, so every face is a separate segment (as in mesh_01).</p>
         </div>
 
         <!-- Summary Table -->
-        <h3 style="text-align: center; color: #1e3c72; margin-top: 40px; margin-bottom: 20px;">📊 סיכום המושגים</h3>
+        <h3 style="text-align: center; color: #1e3c72; margin-top: 40px; margin-bottom: 20px;">📊 Summary of the concepts</h3>
         <table class="comparison-table">
             <tr>
-                <th>מושג</th>
-                <th>מה זה</th>
-                <th>דוגמה</th>
-                <th>גודל</th>
+                <th>Concept</th>
+                <th>What it is</th>
+                <th>Example</th>
+                <th>Size</th>
             </tr>
             <tr>
                 <td><strong>Vertex</strong></td>
-                <td>נקודה בחלל</td>
+                <td>a point in space</td>
                 <td>(0, 0, 0)</td>
-                <td>1 נקודה</td>
+                <td>1 point</td>
             </tr>
             <tr>
                 <td><strong>Triangle</strong></td>
-                <td>3 קודקודים מחוברים</td>
+                <td>3 connected vertices</td>
                 <td>(v0, v1, v2)</td>
-                <td>3 קודקודים</td>
+                <td>3 vertices</td>
             </tr>
             <tr>
                 <td><strong>Mesh</strong></td>
-                <td>קבוצת משולשים</td>
+                <td>a set of triangles</td>
                 <td>12 triangles</td>
-                <td>אלפי משולשים</td>
+                <td>thousands of triangles</td>
             </tr>
             <tr>
                 <td><strong>Segment</strong></td>
-                <td>חלק מהמש (קבוצה קשורה)</td>
-                <td>Surface of cylinder</td>
-                <td>עשרות-מאות משולשים</td>
+                <td>a part of the mesh (a connected group)</td>
+                <td>surface of a cylinder</td>
+                <td>tens to thousands of triangles</td>
             </tr>
             <tr>
                 <td><strong>Normal</strong></td>
-                <td>וקטור מאונך</td>
+                <td>a perpendicular vector</td>
                 <td>[0, 0, 1]</td>
-                <td>וקטור יחידה</td>
+                <td>unit vector</td>
             </tr>
             <tr>
                 <td><strong>Area</strong></td>
-                <td>גודל המשולש</td>
+                <td>the size of the triangle</td>
                 <td>25.5 square units</td>
-                <td>מספר חיובי</td>
+                <td>a positive number</td>
             </tr>
         </table>
 
         <div class="footer">
-            <p>🎓 <strong>מאת:</strong> Geometry Concepts Tutorial</p>
-            <p>להבנה עמוקה יותר של מושגים אלה, חשוב לדמיין אותם בתלת-מימד!</p>
+            <p>🎓 <strong>From:</strong> Geometry Concepts Tutorial</p>
+            <p>To understand these concepts more deeply, try to picture them in 3D!</p>
         </div>
     </div>
 </body>

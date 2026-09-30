@@ -1,0 +1,1362 @@
+{
+  "predictions": [
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 3.8e-17 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            15.0,
+            0.0,
+            5.0
+          ],
+          "normal": [
+            3.2959746043559255e-17,
+            -1.0,
+            -1.1102230246251564e-16
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 6.07958090428734e-16,
+          "vertex_max_distance": 1.0495077029659671e-15,
+          "relative_vertex_rms": 3.845064575362826e-17,
+          "facet_normal_rms_degrees": 6.635508430360549e-15
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 1,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            30.0,
+            2.5,
+            5.0
+          ],
+          "normal": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 2,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 5.3e-17 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            17.5,
+            5.0,
+            5.0
+          ],
+          "normal": [
+            -5.360295540768327e-17,
+            1.0,
+            -1.1102230246251565e-16
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 7.135368352128371e-16,
+          "vertex_max_distance": 1.2251484549086192e-15,
+          "relative_vertex_rms": 5.300018556665245e-17,
+          "facet_normal_rms_degrees": 7.063718832517055e-15
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 3,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            5.0,
+            12.5,
+            5.0
+          ],
+          "normal": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 4,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            2.5,
+            20.0,
+            5.0
+          ],
+          "normal": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 5,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            0.0,
+            10.0,
+            5.0
+          ],
+          "normal": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 6,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            10.833333333333334,
+            5.833333333333333,
+            0.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_01",
+      "segment_id": 7,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            10.833333333333334,
+            5.833333333333333,
+            10.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_02",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "cylinder",
+      "confidence": 0.99,
+      "reason": "cylinder: vertex RMS 9.6e-09 of extent, normal RMS 1.88 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "axis_point": [
+            -4.1465171871837585e-09,
+            -2.9122340938266047e-10,
+            0.0
+          ],
+          "axis_direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "radius": 1.999999994515449
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 3.470383151243703e-08,
+          "vertex_max_distance": 6.227044169193618e-08,
+          "relative_vertex_rms": 9.625111082979506e-09,
+          "facet_normal_rms_degrees": 1.8803718578829771
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_02",
+      "segment_id": 1,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -3.4269051966070878e-09,
+            -6.676573741160262e-10,
+            -3.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_02",
+      "segment_id": 2,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -3.426905206489104e-09,
+            -6.676573833678848e-10,
+            3.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_03",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "cone",
+      "confidence": 0.99,
+      "reason": "cone: vertex RMS 1.1e-08 of extent, normal RMS 1.82 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "apex": [
+            -6.511095349927414e-15,
+            4.953374201370673e-16,
+            6.000000000000011
+          ],
+          "axis_direction": [
+            -4.878244796880227e-10,
+            -3.4261673422449446e-11,
+            -1.0
+          ],
+          "half_angle_radians": 0.2449786624816224
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 2 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 2.748953095320148e-08,
+          "vertex_max_distance": 6.041120070854333e-08,
+          "relative_vertex_rms": 1.0686302032839895e-08,
+          "facet_normal_rms_degrees": 1.8159787707023067
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_03",
+      "segment_id": 1,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -3.4269051966070878e-09,
+            -6.676573741160262e-10,
+            -2.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_03",
+      "segment_id": 2,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -1.713452603244552e-09,
+            -3.338286916839424e-10,
+            2.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_04",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "sphere",
+      "confidence": 0.99,
+      "reason": "sphere: vertex RMS 2.8e-08 of extent, normal RMS 0.20 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "center": [
+            -3.263196792985371e-16,
+            -8.136568740638361e-16,
+            5.683770710942892e-17
+          ],
+          "radius": 1.000000000787034
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 2.8424863862435518e-08,
+          "vertex_max_distance": 7.667514045905932e-08,
+          "relative_vertex_rms": 2.8424863840064183e-08,
+          "facet_normal_rms_degrees": 0.19753108711525783
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_05",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "cylinder",
+      "confidence": 0.746,
+      "reason": "cylinder: vertex RMS 1.7e-08 of extent, normal RMS 1.88 deg, within tolerance; rival types also fit the vertices but explain the facet normals worse: sphere: vertex RMS 1.7e-08 of extent, normal RMS 3.05 deg",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "axis_point": [
+            -4.146516749365889e-09,
+            -2.9122351663079407e-10,
+            1.3553787988498136e-17
+          ],
+          "axis_direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "radius": 1.9999999945154487
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 3.470383154641406e-08,
+          "vertex_max_distance": 6.227044146989158e-08,
+          "relative_vertex_rms": 1.7217922186842158e-08,
+          "facet_normal_rms_degrees": 1.880371857882977
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_05",
+      "segment_id": 1,
+      "kind": "primitive",
+      "primitive_type": "cylinder",
+      "confidence": 0.845,
+      "reason": "cylinder: vertex RMS 1.7e-08 of extent, normal RMS 1.88 deg, within tolerance; rival types also fit the vertices but explain the facet normals worse: sphere: vertex RMS 1.6e-08 of extent, normal RMS 5.14 deg",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "axis_point": [
+            -2.073258462035443e-09,
+            -1.4561178434882291e-10,
+            -1.7084336025883662e-18
+          ],
+          "axis_direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "radius": 0.9999999972577245
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 1.7351915769969398e-08,
+          "vertex_max_distance": 3.113522062392349e-08,
+          "relative_vertex_rms": 1.683383099083686e-08,
+          "facet_normal_rms_degrees": 1.8803718578829771
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_05",
+      "segment_id": 2,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -3.998056090317148e-09,
+            -7.78933502149079e-10,
+            0.25
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_05",
+      "segment_id": 3,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -3.998056077899119e-09,
+            -7.789335510918787e-10,
+            -0.25
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_06",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            5.0,
+            1.6689300538894992e-06,
+            -1.9503048241057835e-17
+          ],
+          "normal": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_06",
+      "segment_id": 1,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -1.2644993228065417e-16,
+            5.0,
+            4.6679334888415204e-17
+          ],
+          "normal": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_06",
+      "segment_id": 2,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 1.1e-07 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -4.999999881331473,
+            -2.5737440851202264e-13,
+            1.1828382864483322e-17
+          ],
+          "normal": [
+            -0.9999999999999973,
+            -6.814484380306871e-08,
+            2.4761679404080198e-08
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 3.3802625860029166e-07,
+          "vertex_max_distance": 9.958804084372868e-07,
+          "relative_vertex_rms": 1.0893766747200312e-07,
+          "facet_normal_rms_degrees": 1.8925113902063704e-05
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_06",
+      "segment_id": 3,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 2.5e-07 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            7.152571376559302e-07,
+            -4.999999723106891,
+            -1.2697051667305992e-17
+          ],
+          "normal": [
+            1.5900459032006702e-07,
+            -0.9999999999999858,
+            5.7777228303425904e-08
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 7.887278484726633e-07,
+          "vertex_max_distance": 2.3237213885241007e-06,
+          "relative_vertex_rms": 2.541878953837684e-07,
+          "facet_normal_rms_degrees": 4.4158616945005045e-05
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_06",
+      "segment_id": 4,
+      "kind": "primitive",
+      "primitive_type": "cylinder",
+      "confidence": 0.99,
+      "reason": "cylinder: vertex RMS 1.6e-08 of extent, normal RMS 1.88 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "axis_point": [
+            -4.146516803437197e-09,
+            -2.9122342987625857e-10,
+            3.5854543839953416e-17
+          ],
+          "axis_direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "radius": 1.9999999945154492
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 3.4703831544291097e-08,
+          "vertex_max_distance": 6.227044102580237e-08,
+          "relative_vertex_rms": 1.552002531659543e-08,
+          "facet_normal_rms_degrees": 1.8803718578829771
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_06",
+      "segment_id": 5,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -7.241251296221982e-08,
+            2.1859458916209524e-07,
+            1.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_06",
+      "segment_id": 6,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -7.241251296221982e-08,
+            2.1859458951574232e-07,
+            -1.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 6.5e-08 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            5.999999644030837,
+            3.4641018980482627,
+            1.2531576467934205e-17
+          ],
+          "normal": [
+            0.8660254147897677,
+            0.4999999809382105,
+            -2.9746239653895777e-09
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 3.6018396016174073e-07,
+          "vertex_max_distance": 9.988666860773972e-07,
+          "relative_vertex_rms": 6.5215249785955e-08,
+          "facet_normal_rms_degrees": 3.108618591786916e-05
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 1,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -4.768371582924202e-07,
+            6.928203105926514,
+            6.371459432481919e-17
+          ],
+          "normal": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 2,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 7.2e-08 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -6.000000053184593,
+            3.4641012339789787,
+            -6.98957623366845e-17
+          ],
+          "normal": [
+            -0.8660255112162877,
+            0.499999813922533,
+            -3.064926445016147e-09
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 3.966711866256395e-07,
+          "vertex_max_distance": 7.511867177917077e-07,
+          "relative_vertex_rms": 7.182166063501911e-08,
+          "facet_normal_rms_degrees": 4.173613486141868e-05
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 3,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 6.9e-08 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -5.999999777584083,
+            -3.4641021871955227,
+            2.4666745948762674e-18
+          ],
+          "normal": [
+            -0.8660253033327592,
+            -0.5000001739873722,
+            -3.960481601197597e-09
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 3.815155673850644e-07,
+          "vertex_max_distance": 9.800887207349933e-07,
+          "relative_vertex_rms": 6.907757061957806e-08,
+          "facet_normal_rms_degrees": 3.040319374141123e-05
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 4,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 7.8e-08 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            1.6689307447210615e-06,
+            -6.928202971190838,
+            -1.907641849123523e-17
+          ],
+          "normal": [
+            9.705343643213967e-08,
+            -0.9999999999999953,
+            5.724642327732809e-09
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 4.3039799190861585e-07,
+          "vertex_max_distance": 1.4130223533550658e-06,
+          "relative_vertex_rms": 7.792826540759909e-08,
+          "facet_normal_rms_degrees": 3.463990497152169e-05
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 5,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 2.6e-08 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            6.000000484926892,
+            -3.4641006039595315,
+            -2.7793713879868705e-17
+          ],
+          "normal": [
+            0.8660255483905319,
+            -0.499999749534816,
+            -1.3121346064470647e-10
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 1.4119166408839055e-07,
+          "vertex_max_distance": 3.3429188930311623e-07,
+          "relative_vertex_rms": 2.5564298541702996e-08,
+          "facet_normal_rms_degrees": 1.2235665798298119e-05
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 6,
+      "kind": "primitive",
+      "primitive_type": "cylinder",
+      "confidence": 0.99,
+      "reason": "cylinder: vertex RMS 1.1e-08 of extent, normal RMS 1.25 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "axis_point": [
+            1.6808570669229767e-08,
+            1.6427910378671215e-08,
+            -5.336007719651388e-16
+          ],
+          "axis_direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "radius": 4.00000000056661
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 6.825791947692044e-08,
+          "vertex_max_distance": 1.3631351869491937e-07,
+          "relative_vertex_rms": 1.0660096062810939e-08,
+          "facet_normal_rms_degrees": 1.2515888175563634
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 7,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -1.7857859558178962e-07,
+            2.9506084518526988e-08,
+            5.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_07",
+      "segment_id": 8,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -1.7857859568184902e-07,
+            2.950608439725997e-08,
+            -5.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_08",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "torus",
+      "confidence": 0.99,
+      "reason": "torus: vertex RMS 1.7e-08 of extent, normal RMS 2.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "center": [
+            1.0145842919270768e-11,
+            3.8625117258556863e-16,
+            3.497270094674774e-16
+          ],
+          "axis_direction": [
+            -2.534938814332768e-17,
+            -0.5646424720353085,
+            0.8253356158399175
+          ],
+          "major_radius": 4.000000000611315,
+          "minor_radius": 1.2499999987590948
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 5 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 7.612746418486884e-08,
+          "vertex_max_distance": 2.3229938173052744e-07,
+          "relative_vertex_rms": 1.7412014482864732e-08,
+          "facet_normal_rms_degrees": 1.9969983677917669
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_09",
+      "segment_id": 0,
+      "kind": "unresolved",
+      "primitive_type": null,
+      "confidence": 0.95,
+      "reason": "no supported primitive explains the segment; closest is cylinder: vertex RMS 1.8e-01 of extent, normal RMS 29.88 deg (tolerance: vertex RMS 1e-03 of extent, normal RMS 3.31 deg); the vertices lie on an ellipsoid with semi-axes 4, 2.5, 1.5 centred at (0, 0, 0) (vertex RMS 2.7e-08 of extent), a general quadric that is not a supported primitive",
+      "fit": {
+        "status": "failed",
+        "parameters": null,
+        "notes": "Attempted cylinder, revised to unresolved: no supported primitive explains the segment; closest is cylinder: vertex RMS 1.8e-01 of extent, normal RMS 29.88 deg (tolerance: vertex RMS 1e-03 of extent, normal RMS 3.31 deg); the vertices lie on an ellipsoid with semi-axes 4, 2.5, 1.5 centred at (0, 0, 0) (vertex RMS 2.7e-08 of extent), a general quadric that is not a supported primitive. Parameters withheld because the fit does not follow the geometry. scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.4862177499732951,
+          "vertex_max_distance": 1.6120945613761644,
+          "relative_vertex_rms": 0.17886164217889064,
+          "facet_normal_rms_degrees": 29.879848617844694
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_10",
+      "segment_id": 0,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -3.7962577217211163e-16,
+            -5.7397653411467e-18,
+            0.0
+          ],
+          "normal": [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_10",
+      "segment_id": 1,
+      "kind": "unresolved",
+      "primitive_type": null,
+      "confidence": 0.95,
+      "reason": "no supported primitive explains the segment; closest is cone: vertex RMS 1.1e-01 of extent, normal RMS 21.87 deg (tolerance: vertex RMS 1e-03 of extent, normal RMS 5.12 deg); no general quadric fits either (vertex RMS 3.0e-01 of extent), so the surface is treated as freeform",
+      "fit": {
+        "status": "failed",
+        "parameters": null,
+        "notes": "Attempted cone, revised to unresolved: no supported primitive explains the segment; closest is cone: vertex RMS 1.1e-01 of extent, normal RMS 21.87 deg (tolerance: vertex RMS 1e-03 of extent, normal RMS 5.12 deg); no general quadric fits either (vertex RMS 3.0e-01 of extent), so the surface is treated as freeform. Parameters withheld because the fit does not follow the geometry. scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.3995524663002569,
+          "vertex_max_distance": 1.1355966252985632,
+          "relative_vertex_rms": 0.1072266189116539,
+          "facet_normal_rms_degrees": 21.866079811128284
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_10",
+      "segment_id": 2,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            2.4966353238569784e-05,
+            -4.0,
+            1.1556337266575558
+          ],
+          "normal": [
+            0.0,
+            -1.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_10",
+      "segment_id": 3,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            5.0,
+            -0.04911835132697199,
+            0.9781761738288484
+          ],
+          "normal": [
+            1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_10",
+      "segment_id": 4,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            2.6332435489364362e-05,
+            4.0,
+            1.0254653103444173
+          ],
+          "normal": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    },
+    {
+      "mesh_id": "mesh_10",
+      "segment_id": 5,
+      "kind": "primitive",
+      "primitive_type": "plane",
+      "confidence": 0.99,
+      "reason": "plane: vertex RMS 0.0e+00 of extent, normal RMS 0.00 deg, within tolerance",
+      "fit": {
+        "status": "fitted",
+        "parameters": {
+          "point": [
+            -5.0,
+            -0.04183539086925576,
+            1.0769282089658574
+          ],
+          "normal": [
+            -1.0,
+            0.0,
+            0.0
+          ]
+        },
+        "notes": "scipy least_squares (trf, soft_l1 loss) on signed vertex-to-surface distances, weighted by one third of the incident triangle area, in a frame normalized by the segment's RMS extent and mapped back to the input frame; seeded by closed-form PCA/linear-least-squares guesses. Converged after 1 residual evaluations. Plane normals and cylinder/torus axes are unit vectors with arbitrary sign; the cone axis points from the apex toward the segment.",
+        "residual": {
+          "units": "input mesh length units; normal angle in degrees",
+          "sampling": "mesh vertices (RMS weighted by one third of incident triangle area) and facet centroids (normals, area weighted)",
+          "vertex_rms_distance": 0.0,
+          "vertex_max_distance": 0.0,
+          "relative_vertex_rms": 0.0,
+          "facet_normal_rms_degrees": 0.0
+        }
+      }
+    }
+  ]
+}

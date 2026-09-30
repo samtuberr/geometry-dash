@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic calculations - fitpipeline</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            border-left: 4px solid #3498db;
+            padding-left: 10px;
+        }
+        h3 {
+            color: #5a6c7d;
+        }
+        .module-box {
+            background: #ecf0f1;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .concept-box {
+            background: #e8f4f8;
+            border-left: 4px solid #16a085;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .code-inline {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+        }
+        .finding-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #34495e;
+            color: white;
+        }
+        tr:hover {
+            background: #f5f5f5;
+        }
+        .metric {
+            display: inline-block;
+            background: #ecf0f1;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 4px;
+            border-left: 3px solid #3498db;
+        }
+        .success { color: #27ae60; font-weight: bold; }
+        .warning { color: #f39c12; font-weight: bold; }
+        .error { color: #e74c3c; font-weight: bold; }
+        .library {
+            display: inline-block;
+            background: #d5f4e6;
+            padding: 8px 12px;
+            margin: 3px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .library.numpy { border-left: 3px solid #e74c3c; }
+        .library.scipy { border-left: 3px solid #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>The basic calculations stage: fitpipeline</h1>
+        <p><strong>Date:</strong> 30 September 2026 | <strong>Status:</strong> <span class="success">✓ done</span></p>
+
+        <h2>Overview</h2>
+        <p>This stage takes a segment (a group of triangles from the mesh) and computes two things:</p>
+        <ol>
+            <li><strong>Normalization and weighting:</strong> moves the vertices and the surface size into a standard coordinate frame, so the maths does not depend on units or position</li>
+            <li><strong>Initial hypotheses:</strong> guesses the primitive type (plane, cylinder, cone, sphere, torus) and its parameters in closed form</li>
+        </ol>
+
+        <h2>The modules created</h2>
+
+        <div class="module-box">
+            <h3>1. <code class="code-inline">geometry.py</code>: normalization and sample sets</h3>
+            <p>Separates the "normalization" (scaling and translation) from the geometry itself.</p>
+
+            <h4>The <code class="code-inline">Normalization</code> class</h4>
+            <p>Stores two parameters:</p>
+            <ul>
+                <li><strong>center:</strong> the centre of the segment in the original coordinate frame</li>
+                <li><strong>scale:</strong> the representative length of the segment (in the original frame)</li>
+            </ul>
+            <p>Two functions:</p>
+            <ul>
+                <li><span class="code-inline">points_to_normalized(points)</span>: moves points from the original frame to the normalized one: <code>(p − center) / scale</code></li>
+                <li><span class="code-inline">points_from_normalized(points)</span>: back to the original: <code>p × scale + center</code></li>
+            </ul>
+            <p><strong>Why?</strong> If you fit in the normalized frame (uniform scale, centred), the parameters you get do not depend on where the mesh sits or how big it is. They map back exactly to the original frame.</p>
+
+            <h4>The <code class="code-inline">NormalizedSegment</code> class</h4>
+            <p>Turns the segment into data that is ready for fitting:</p>
+            <ul>
+                <li><span class="code-inline">vertices</span>: vertices in the normalized frame (points on the surface)</li>
+                <li><span class="code-inline">vertex_weights</span>: an area weight for each vertex (positive, sums to 1)</li>
+                <li><span class="code-inline">facet_centroids</span>: triangle centres in the normalized frame</li>
+                <li><span class="code-inline">facet_normals</span>: the unit normal of each triangle</li>
+                <li><span class="code-inline">facet_weights</span>: an area weight for each triangle (positive, sums to 1)</li>
+            </ul>
+            <p><strong>Why both vertices and triangles?</strong> Vertices serve the positional guesses (circle fits, angle computation). Triangle normals check whether the primitive type was guessed correctly (a plane's normal is constant; a cylinder's normal is perpendicular to its axis).</p>
+
+            <h4>The <span class="code-inline">prepare_segment(record)</span> function</h4>
+            <p>Computes the normalization:</p>
+            <ul>
+                <li><strong>center:</strong> the area-weighted centroid of all the triangles</li>
+                <li><strong>scale:</strong> the area-weighted root mean square (RMS) distance of the triangle corners from the centroid</li>
+            </ul>
+        </div>
+
+        <div class="concept-box">
+            <h3>💡 Concept: centroid</h3>
+            <p>The centre of mass of a shape. If every triangle of the segment weighs as much as its area, the centroid is the weighted average of the triangle centres:</p>
+            <p style="text-align: center; font-family: monospace;">
+                centroid = Σ (area<sub>i</sub> × center<sub>i</sub>) / Σ area<sub>i</sub>
+            </p>
+            <p>This is better than a plain average of the vertices, because large triangles should rightly count for more.</p>
+        </div>
+
+        <div class="concept-box">
+            <h3>💡 Concept: area weighting</h3>
+            <p>When the triangles of a segment have very different sizes (adaptive triangulation, for example), weighting by area ensures that small triangles do not skew the guess or the fit.</p>
+            <p>Example: a cylinder segment with one large triangle at one end and many tiny triangles at the other. If every vertex counts the same, the dense region (with many vertices) has too much influence even though it covers little area.</p>
+        </div>
+
+        <div class="module-box">
+            <h3>2. <code class="code-inline">primitives.py</code>: distance and normal for each primitive</h3>
+            <p>For each primitive type (plane, cylinder, cone, sphere, torus) there are two functions:</p>
+
+            <h4>Distance functions</h4>
+            <ul>
+                <li><span class="code-inline">distance_to_plane(points, point, normal)</span>: distance from a point to a plane</li>
+                <li><span class="code-inline">distance_to_sphere(points, center, radius)</span>: distance from a point to a sphere</li>
+                <li><span class="code-inline">distance_to_cylinder(points, axis_point, axis_direction, radius)</span></li>
+                <li><span class="code-inline">distance_to_cone(points, apex, axis_direction, half_angle_radians)</span></li>
+                <li><span class="code-inline">distance_to_torus(points, center, axis_direction, major_radius, minor_radius)</span></li>
+            </ul>
+            <p>Every distance is to the <strong>infinite surface</strong> (not bounded). This matters: a cone has no "top edge".</p>
+
+            <h4>Normal functions</h4>
+            <ul>
+                <li><span class="code-inline">normal_of_*(points, ...)</span>: the unit surface normal at the nearest point</li>
+            </ul>
+            <p><strong>Why normals?</strong> As a check: if a segment really is a plane, the surface normal should equal (or be opposite to) the normals of the input triangles. A large angle between the two means the guess is off.</p>
+        </div>
+
+        <div class="module-box">
+            <h3>3. <code class="code-inline">hypotheses.py</code>: initial hypotheses</h3>
+            <p>The central function: <span class="code-inline">propose_hypotheses(record)</span></p>
+            <p>It returns a list of <span class="code-inline">Hypothesis</span> objects, one for every primitive type that can be computed.</p>
+
+            <h4>Each hypothesis contains:</h4>
+            <ul>
+                <li><span class="code-inline">primitive_type</span>: the primitive type</li>
+                <li><span class="code-inline">parameters</span>: the parameters (in the input frame and units)</li>
+                <li><span class="code-inline">relative_rms</span>: the relative residual (vertex-to-surface distance, in units of the normalization scale)</li>
+                <li><span class="code-inline">normal_rms_radians</span>: the normal error (an angle in radians)</li>
+            </ul>
+
+            <h4>How each type is computed:</h4>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Method</th>
+                    <th>Data source</th>
+                </tr>
+                <tr>
+                    <td><strong>Plane</strong></td>
+                    <td>PCA of the vertices → the weakest direction is the normal</td>
+                    <td>vertices</td>
+                </tr>
+                <tr>
+                    <td><strong>Sphere</strong></td>
+                    <td>linear (algebraic) least squares</td>
+                    <td>vertices</td>
+                </tr>
+                <tr>
+                    <td><strong>Cylinder</strong></td>
+                    <td>axis from PCA of the normals, radius from a circle fit</td>
+                    <td>normals and vertices</td>
+                </tr>
+                <tr>
+                    <td><strong>Cone</strong></td>
+                    <td>axis and apex from the normals, angle from the vertices</td>
+                    <td>normals and vertices</td>
+                </tr>
+                <tr>
+                    <td><strong>Torus</strong></td>
+                    <td>axis from Plücker coordinates, radii from a circle fit</td>
+                    <td>normals and vertices</td>
+                </tr>
+            </table>
+
+            <p><strong>Important:</strong> there are no iterations and no randomness. Every guess is a closed-form computation (SVD, least squares).</p>
+        </div>
+
+        <h2>How the libraries contribute</h2>
+
+        <div style="margin: 20px 0;">
+            <span class="library numpy">NumPy</span>
+            <p style="margin-top: 10px;">
+                <strong>What:</strong> fast matrix computations<br>
+                <strong>Used here for:</strong>
+            </p>
+            <ul>
+                <li><span class="code-inline">np.linalg.eigh</span>: eigendecomposition of real symmetric matrices (PCA)</li>
+                <li><span class="code-inline">np.linalg.lstsq</span>: linear least squares (sphere, circle fits, cone apex)</li>
+                <li><span class="code-inline">np.linalg.svd</span>: the smallest singular vector (the torus axis in Plücker coordinates)</li>
+                <li><span class="code-inline">np.linalg.norm</span>: vector lengths (normals, distances)</li>
+                <li><span class="code-inline">np.cross</span>: cross products (normals, Plücker coordinates)</li>
+                <li>basic operations: matrix subtraction, dot products, broadcasting</li>
+            </ul>
+            <p><strong>Why?</strong> NumPy is precise on large arrays, and the same computation always gives the same result.</p>
+        </div>
+
+        <div style="margin: 20px 0;">
+            <span class="library scipy">SciPy</span>
+            <p style="margin-top: 10px;">
+                <strong>What:</strong> advanced scientific algorithms<br>
+                <strong>Used here for:</strong> nothing yet at this stage. The next stage (refinement with least squares) uses <span class="code-inline">scipy.optimize.least_squares</span>.
+            </p>
+        </div>
+
+        <h2>Findings on the real data</h2>
+
+        <div class="finding-box">
+            <h3>✓ Exact fits (residual &lt; 1e-6)</h3>
+            <table>
+                <tr>
+                    <th>Mesh</th>
+                    <th>Segment</th>
+                    <th>Type</th>
+                    <th>Parameter</th>
+                    <th>Note</th>
+                </tr>
+                <tr>
+                    <td>mesh_02</td>
+                    <td>0</td>
+                    <td>cylinder</td>
+                    <td>radius 2.0</td>
+                    <td>a classic axis-aligned cylinder</td>
+                </tr>
+                <tr>
+                    <td>mesh_03</td>
+                    <td>0</td>
+                    <td>cone</td>
+                    <td>half angle arctan(0.25)</td>
+                    <td>a cone frustum of height 4</td>
+                </tr>
+                <tr>
+                    <td>mesh_04</td>
+                    <td>0</td>
+                    <td>sphere</td>
+                    <td>radius 1.0</td>
+                    <td>a unit sphere</td>
+                </tr>
+                <tr>
+                    <td>mesh_08</td>
+                    <td>0</td>
+                    <td>torus</td>
+                    <td>R &gt; r &gt; 0</td>
+                    <td>a classic torus</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="finding-box">
+            <h3>⚠ Freeform segments (residual &gt; 0.05)</h3>
+            <p>Two segments do not fit any primitive:</p>
+            <ul>
+                <li><strong>mesh_09, segment 0:</strong> an ellipsoid (semi-axes 4, 2.5, 1.5). It is a general quadric, which is not a supported primitive</li>
+                <li><strong>mesh_10, segment 1:</strong> a freeform (deformed) surface that does not fit any quadric</li>
+            </ul>
+            <p>Both are marked <span class="code-inline">unresolved</span> at the classification stage.</p>
+        </div>
+
+        <div class="finding-box">
+            <h3>⚠ An interesting case: cylinder versus sphere</h3>
+            <p><strong>The problem:</strong> two rings of vertices (typical of a coarse cylinder) also lie on a sphere!</p>
+            <p><strong>The solution:</strong> check the normals. On a cylinder the surface normal is perpendicular to the axis (angle error ~1.9°). On a sphere the surface normal points at the centre (angle error ~26.7°).</p>
+            <table>
+                <tr>
+                    <th>Type</th>
+                    <th>Vertex RMS</th>
+                    <th>Normal RMS</th>
+                </tr>
+                <tr>
+                    <td>cylinder (correct)</td>
+                    <td>1e-08</td>
+                    <td>1.9°</td>
+                </tr>
+                <tr>
+                    <td>sphere (wrong)</td>
+                    <td>5e-09</td>
+                    <td>26.7°</td>
+                </tr>
+            </table>
+            <p>The vertex RMS is even smaller for the sphere, but <strong>the normals reveal the structure</strong>.</p>
+        </div>
+
+        <div class="finding-box">
+            <h3>📊 Hypothesis statistics</h3>
+            <div class="metric">
+                <strong>43 segments checked</strong>
+            </div>
+            <div class="metric">
+                <strong>136 automated tests</strong>
+            </div>
+            <div class="metric">
+                <strong>100% passing ✓</strong>
+            </div>
+            <p>Including:</p>
+            <ul>
+                <li>synthetic primitives of every type under several poses (rotation, scale, translation)</li>
+                <li>all 43 real segments</li>
+                <li>exact (bitwise) repeatability checks</li>
+                <li>poor-fit rejection checks</li>
+            </ul>
+        </div>
+
+        <h2>A change for the cone</h2>
+        <p>For a cone frustum (mesh_03) the primitive is an <strong>infinite cone</strong>, not a truncated one. The facet normals come from chord planes, not tangent planes, so the angle they imply is slightly smaller than the true angle.</p>
+        <p><strong>The fix:</strong> use the vertices to compute the angle exactly:</p>
+        <p style="text-align: center; font-family: monospace;">
+            tan(half_angle) = (area_weighted (axial × radial)) / (area_weighted axial²)
+        </p>
+        <p>This gives the angle <strong>exactly</strong>, independent of the frustum's height or size.</p>
+
+        <h2>Next steps</h2>
+        <p>Are the guesses good enough? Not always:</p>
+        <ul>
+            <li><strong>Torus:</strong> only ~1e-4 accuracy (the facet normals of a tessellated torus are tilted)</li>
+            <li><strong>Cone:</strong> now 1e-8 accuracy, after switching to the vertices for the angle</li>
+        </ul>
+        <p>The next step is <strong>refinement with SciPy</strong>: take the guess as a starting point and fit with SciPy's <span class="code-inline">least_squares</span> to get the best parameters under the L² norm of the distances.</p>
+
+        <h2>Current limitations</h2>
+        <ul>
+            <li><strong>CGAL not used:</strong> the closed-form guesses covered every real segment</li>
+            <li><strong>Plotly optional:</strong> no visualization yet</li>
+            <li><strong>No classification yet:</strong> only guesses, no final decision about the type</li>
+        </ul>
+
+        <hr style="margin-top: 40px; border: none; border-top: 2px solid #bbb;">
+        <p style="color: #666; font-size: 0.9em; text-align: center;">
+            Built with NumPy and a little SciPy | no network or LLM calls at runtime
+        </p>
+    </div>
+</body>
+</html>

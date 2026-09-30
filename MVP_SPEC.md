@@ -1,12 +1,14 @@
 # MVP Spec: Segment Classifier & Primitive Fitter
 
+> Planning document written before implementation. See `README.md` for what was actually built.
+
 ## User Story
 As a take-home task reviewer, I want to run one command over the supplied meshes so that I get a `predictions.json` classifying every segment (plane / cylinder / cone / sphere / torus / unresolved) with fitted parameters and a short residual-based justification for each decision.
 
 ## Core Features (MVP only — max 5)
 1. **Mesh & segment loader**: reads `mesh.json` + `segments.json` (or the CSV) for a given `mesh_id`, groups triangles by `segment_id`, and exposes per-segment vertex/triangle arrays as NumPy input. Input: `data/mesh_XX/`. Output: in-memory segment records (points, triangles, areas, normals).
 2. **Classifier**: for each segment, decides `primitive` vs `unresolved`, and if primitive, which of the five supported types. Input: segment geometry (points, normals, areas). Output: `kind`, `primitive_type`, `confidence`, `reason`.
-3. **Primitive fitter**: runs SciPy `least_squares` (with NumPy-derived initial guesses, CGAL-assisted guesses optional) for the classified type and returns parameters in the schema's suggested convention (`point`/`normal`, `axis_point`/`axis_direction`/`radius`, etc.). Input: segment geometry + classified type. Output: `fit.status`, `fit.parameters`, `fit.notes`, residual summary.
+3. **Primitive fitter**: runs SciPy `least_squares` (with closed-form NumPy initial guesses) for the classified type and returns parameters in the schema's suggested convention (`point`/`normal`, `axis_point`/`axis_direction`/`radius`, etc.). Input: segment geometry + classified type. Output: `fit.status`, `fit.parameters`, `fit.notes`, residual summary.
 4. **predictions.json writer**: assembles one entry per `(mesh_id, segment_id)` in the required schema and writes a single valid JSON file. Input: all classified + fitted segments across all 10 meshes. Output: `predictions.json`.
 5. **CLI entry point**: one command (`python -m fitpipeline data/ predictions.json`) that runs steps 1–4 over all meshes end-to-end, deterministically, with no network or LLM calls at runtime.
 
@@ -28,8 +30,8 @@ As a take-home task reviewer, I want to run one command over the supplied meshes
 ## Tech Stack
 - **Runtime**: Python 3.12 + `uv` for environment/dependency management
 - **Core numerics**: NumPy (areas, normals, PCA-based initial guesses) + SciPy `optimize.least_squares` (bounded, robust-loss refinement for all five primitives)
-- **Optional initializer**: CGAL Efficient RANSAC bindings, time-boxed to 30–45 minutes, only for hard cone/torus initial guesses (separate Python 3.12 venv — CGAL wheels don't support the workspace's default 3.14)
-- **Inspection (optional, non-deliverable)**: Plotly, standalone offline HTML export
+- **Optional initializer (planned, not built)**: CGAL Efficient RANSAC was considered for hard cone/torus seeds; the closed-form NumPy seeds were good enough on every supplied segment, so CGAL is not a dependency
+- **Inspection (optional, non-deliverable)**: `view.py` console inspector; the planned Plotly HTML report was not built
 - **Testing**: pytest — known-geometry fits, partial-surface handling, rotation/translation invariance, rejection of degenerate/insufficient input
 - **No auth, no frontend, no hosted backend** — this is a local batch CLI tool, not a service
 

@@ -332,7 +332,7 @@ Cylinder: 5 parameters
                     </tr>
                     <tr>
                         <td>Cone</td>
-                        <td>5</td>
+                        <td>6</td>
                         <td>apex: 3, axis: 2 tilt, half_angle bounded</td>
                     </tr>
                     <tr>
@@ -382,7 +382,7 @@ Cylinder: 5 parameters
 class Refinement:
     initial: Hypothesis         # ההשערה המקורית
     refined: Hypothesis         # ההשערה המחודדת
-    converged: bool             # True if gradient tolerance, False if max_nfev
+    converged: bool             # True if a tolerance stopped it, False if max_nfev
     evaluations: int            # מספר קריאות לfuntion residual
     message: str                # הודעת המסקנה של scipy
                 </div>
@@ -492,13 +492,13 @@ from fitpipeline import (
                 <div class="file-list">
                     <div class="file-item">
                         <span class="file-name">src/fitpipeline/refinement.py</span>
-                        <p><strong>456 שורות.</strong>
+                        <p><strong>כ-250 שורות.</strong>
                         Refinement engine: chart builders, least_squares wrapper,
                         <code>refine_hypothesis</code>, <code>refine_segment</code>.</p>
                     </div>
                     <div class="file-item">
                         <span class="file-name">tests/test_refinement.py</span>
-                        <p><strong>348 שורות.</strong> 87 בדיקות: convergence, perturbation, robustness, float32 noise, real data, repetition.</p>
+                        <p><strong>כ-310 שורות.</strong> 87 בדיקות: convergence, perturbation, robustness, float32 noise, real data, repetition.</p>
                     </div>
                 </div>
 
@@ -575,7 +575,7 @@ from fitpipeline import (
                 </p>
 
                 <ol>
-                    <li><strong>בחירת הטיפוס:</strong> זה עם RMS הנמוך ביותר</li>
+                    <li><strong>בחירת הטיפוס:</strong> (בפועל לא נבחר ה-RMS הנמוך ביותר, אלא הטיפוס הפשוט ביותר שעובר את שני הספים. ראו את <a href="CLASSIFIER_STAGE.html">שלב ה-Classifier</a>)</li>
                     <li><strong>בדיקת confidence:</strong> האם RMS + normal angle טובים מספיק?</li>
                     <li><strong>דחיה:</strong> אם כל הטיפוסים גרועים, סמן כ-<code>unresolved</code></li>
                     <li><strong>חיזוי:</strong> בנה <code>predictions.json</code> עם <code>fit.status</code>, <code>fit.parameters</code>, <code>fit.notes</code></li>

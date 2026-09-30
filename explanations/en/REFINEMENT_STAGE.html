@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refinement stage - SciPy least squares</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        main {
+            padding: 40px;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #764ba2;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        p, li {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+        ul, ol {
+            margin-left: 30px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            direction: ltr;
+        }
+        .highlight {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+        }
+        .success {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+        }
+        .warning {
+            background: #f8d7da;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #dc3545;
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        tr:hover {
+            background: #f9f9f9;
+        }
+        .flow-diagram {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .flow-step {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin: 0 10px 15px 10px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .flow-arrow {
+            display: inline-block;
+            margin: 0 5px;
+            font-size: 1.5em;
+            color: #667eea;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .comparison-box {
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        .before {
+            background: #ffe6e6;
+            border-color: #dc3545;
+        }
+        .after {
+            background: #e6f3ff;
+            border-color: #007bff;
+        }
+        .metric {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        .metric-title {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        .file-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+        .file-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #667eea;
+        }
+        .file-name {
+            font-family: monospace;
+            color: #d63384;
+            font-weight: bold;
+        }
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+        footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 The refinement stage</h1>
+            <p>Nonlinear refinement of the PCA/algebraic hypotheses with <code>scipy.optimize.least_squares</code></p>
+        </header>
+
+        <main>
+            <!-- What and why -->
+            <section>
+                <h2>Why is a refinement stage needed?</h2>
+
+                <h3>The problem with the hypotheses stage</h3>
+                <p>
+                    In the previous stage we built <strong>closed-form</strong> hypotheses for every primitive:
+                </p>
+                <ul>
+                    <li><strong>Plane:</strong> PCA of the vertices</li>
+                    <li><strong>Sphere:</strong> algebraic linear least squares</li>
+                    <li><strong>Cylinder:</strong> a circle in the plane perpendicular to the axis, axis from the Gauss map</li>
+                    <li><strong>Cone:</strong> an apex estimate from the tangent planes</li>
+                    <li><strong>Torus:</strong> a circle in the (r, z) profile, axis from Plücker coordinates</li>
+                </ul>
+                <p>
+                    These hypotheses are <strong>fast and deterministic</strong>, but:
+                </p>
+
+                <div class="warning">
+                    <strong>⚠️ They do not minimize the geometric distance</strong>
+                    <ul>
+                        <li>Torus: facet normals come from chords, not the true surface normal → a bias in the axis</li>
+                        <li>Sphere/Cylinder: an algebraic fit, not a geometric one (it minimizes ‖d² − r²‖, not |d|)</li>
+                        <li>Cone: the apex from the tangent planes shifts when there is tessellation error</li>
+                    </ul>
+                </div>
+
+                <p><strong>A numerical example:</strong> a synthetic torus in a random pose:</p>
+                <div class="metric">
+                    <div class="metric-title">Torus seed (hypothesis):</div>
+                    <div>Relative RMS = <code>4.87e-05</code></div>
+                </div>
+
+                <h3>The solution: refinement</h3>
+                <p>
+                    After the hypothesis, <code>scipy.optimize.least_squares</code> runs with the hypothesis as its seed.
+                    <strong>The geometric objective:</strong> minimize the weighted sum of squares of the
+                    vertex-to-surface distances, weighted by triangle area.
+                </p>
+
+                <div class="success">
+                    <strong>✓ Result:</strong>
+                    <ul>
+                        <li>Torus seed 4.87e-05 → <strong>torus refined 1.27e-16</strong> (machine precision)</li>
+                        <li>Convergence in only 3 iterations</li>
+                        <li>Every synthetic primitive converges to machine precision</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- Techniques -->
+            <section>
+                <h2>Optimization techniques</h2>
+
+                <h3>1️⃣ Signed distances (not unsigned)</h3>
+                <p>
+                    At first we used <code>abs(distance)</code> everywhere:
+                </p>
+                <div class="before comparison-box">
+                    <strong>❌ Unsigned (a kink at the surface)</strong><br><br>
+                    <code>distance = |vertex - surface|</code><br><br>
+                    <strong>The problem:</strong> the derivative from the right ≠ the derivative from the left at 0.
+                    The numerical (finite-difference) Jacobian breaks down once the residual is &lt; 1e-8.
+                </div>
+                <div class="after comparison-box">
+                    <strong>✓ Signed (smooth)</strong><br><br>
+                    <code>distance = vertex · normal - offset</code><br><br>
+                    <strong>The advantage:</strong> smooth everywhere.
+                    The solver gets an accurate Jacobian and converges to machine precision.
+                </div>
+
+                <p>
+                    <strong>Now:</strong> <code>primitives.py</code> has both <code>signed_surface_distance</code> and
+                    <code>surface_distance = abs(signed_distance)</code>. Refinement uses the signed one;
+                    the public scorer uses the unsigned one.
+                </p>
+
+                <h3>2️⃣ Chart (parametrization)</h3>
+                <p>
+                    The parameters of a primitive are not independent:
+                    directions must be unit vectors, radii must be positive, and so on.
+                    The solver minimizes over a minimal <strong>chart (parametrization)</strong> around the seed.
+                </p>
+
+                <div class="code-block">
+Cylinder: 5 parameters
+  θ ∈ [t₁, t₂, t₃, t₄, r]
+
+  Axis point = origin + t₁·e₁ + t₂·e₂  (slide perpendicular to seed axis)
+  Axis direction = normalized(seed_axis + t₃·e₁ + t₄·e₂)  (tilt)
+  Radius = r  (bounded: r ≥ 1e-6)
+                </div>
+
+                <p><strong>Degrees of freedom:</strong></p>
+                <table>
+                    <tr>
+                        <th>Primitive</th>
+                        <th>DOF</th>
+                        <th>Breakdown</th>
+                    </tr>
+                    <tr>
+                        <td>Plane</td>
+                        <td>3</td>
+                        <td>normal: 2 tilts (unit), point: 1 (along the normal)</td>
+                    </tr>
+                    <tr>
+                        <td>Sphere</td>
+                        <td>4</td>
+                        <td>center: 3, radius: 1</td>
+                    </tr>
+                    <tr>
+                        <td>Cylinder</td>
+                        <td>5</td>
+                        <td>axis origin: 2 (across the axis), axis: 2 tilts, radius: 1</td>
+                    </tr>
+                    <tr>
+                        <td>Cone</td>
+                        <td>6</td>
+                        <td>apex: 3, axis: 2 tilts, half_angle: 1 (bounded)</td>
+                    </tr>
+                    <tr>
+                        <td>Torus</td>
+                        <td>7</td>
+                        <td>center: 3, axis: 2 tilts, R: 1, r: 1</td>
+                    </tr>
+                </table>
+
+                <h3>3️⃣ Robust loss</h3>
+                <p>
+                    The vertex distances can have outliers (noise, tessellation error).
+                    The default is <code>loss="soft_l1"</code> with <code>f_scale=0.01</code> (1% of the RMS extent).
+                </p>
+                <ul>
+                    <li><code>loss="linear"</code>: ordinary least squares, sensitive to outliers</li>
+                    <li><code>loss="soft_l1"</code>: a smooth approximation of ℓ₁ (Huber-like), resistant to outliers</li>
+                </ul>
+
+                <h3>4️⃣ Normalized frame</h3>
+                <p>
+                    As in the previous stage, all computations run in a normalized frame (center = 0, RMS = 1).
+                    The result is mapped back to the input frame in the original units.
+                    <strong>The advantage:</strong> tolerances and bounds do not depend on the size or position of the mesh.
+                </p>
+            </section>
+
+            <!-- API -->
+            <section>
+                <h2>API</h2>
+
+                <h3>Entry points</h3>
+                <div class="file-list">
+                    <div class="file-item">
+                        <span class="file-name">refine_hypothesis(record, hypothesis, loss="soft_l1", robust_scale=0.01)</span>
+                        <p>Refines one hypothesis. Returns a <code>Refinement</code> with <code>initial</code>, <code>refined</code> (Hypothesis), <code>converged</code>, <code>evaluations</code>, <code>message</code>.</p>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">refine_segment(record, loss="soft_l1", robust_scale=0.01)</span>
+                        <p>Proposes and refines every primitive for a segment. Returns list[<code>Refinement</code>].</p>
+                    </div>
+                </div>
+
+                <h3>Data classes</h3>
+                <div class="code-block">
+@dataclass(frozen=True)
+class Refinement:
+    initial: Hypothesis         # the original hypothesis
+    refined: Hypothesis         # the refined hypothesis
+    converged: bool             # True if a tolerance stopped it, False if max_nfev
+    evaluations: int            # number of residual function calls
+    message: str                # scipy's termination message
+                </div>
+
+                <h3>Imports</h3>
+                <p>All the functions are in the main package:</p>
+                <div class="code-block">
+from fitpipeline import (
+    refine_hypothesis,
+    refine_segment,
+    Refinement,
+)
+                </div>
+            </section>
+
+            <!-- Results -->
+            <section>
+                <h2>Results and tests</h2>
+
+                <h3>Synthetic data (known answers)</h3>
+                <table>
+                    <tr>
+                        <th>Primitive</th>
+                        <th>Seed RMS</th>
+                        <th>Refined RMS</th>
+                        <th>Iterations</th>
+                        <th>Converged</th>
+                    </tr>
+                    <tr>
+                        <td>Plane</td>
+                        <td>1e-17</td>
+                        <td>1e-17</td>
+                        <td>1</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td>Sphere</td>
+                        <td>1e-14</td>
+                        <td>1e-14</td>
+                        <td>1</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td>Cylinder</td>
+                        <td>7e-17</td>
+                        <td>1.2e-16</td>
+                        <td>1</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td>Cone</td>
+                        <td>2e-16</td>
+                        <td>2e-16</td>
+                        <td>1</td>
+                        <td>✓</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Torus</strong></td>
+                        <td><strong>4.87e-05</strong></td>
+                        <td><strong>1.27e-16</strong></td>
+                        <td><strong>3</strong></td>
+                        <td><strong>✓</strong></td>
+                    </tr>
+                </table>
+
+                <p><strong>Every test runs in several poses:</strong> identity, scaled + moved + rotated, and 1e6 units away (a float precision stress test).</p>
+
+                <h3>Real data (43 segments × 10 meshes)</h3>
+                <div class="highlight">
+                    <strong>⚠️ An important point:</strong> the supplied coordinates are <strong>float32</strong>,
+                    so the natural noise is ~1e-7 in relative RMS.
+                    Refinement cannot go below that.
+                </div>
+
+                <ul>
+                    <li><strong>Segments that are exactly primitives:</strong> converge to ~1e-7 (the float32 noise floor)</li>
+                    <li><strong>Segments with tessellation noise:</strong> improve after refinement, but not substantially</li>
+                    <li><strong>Freeform segments:</strong> stay poor fits (RMS > 0.05), as they should</li>
+                    <li><strong>Non-convergence:</strong> 4 cases (mesh_04, mesh_07, mesh_08, mesh_10) hit max_nfev=200.
+                        All of them are a wrong type on a segment of another primitive (for example a plane on a cylinder). The solver does not converge because no good fit exists.</li>
+                </ul>
+
+                <h3>Test summary</h3>
+                <div class="success">
+                    <strong>✓ 223 tests passing at the end of this stage:</strong>
+                    <ul>
+                        <li>136 in `test_hypotheses.py` (existing)</li>
+                        <li>87 in `test_refinement.py` (new)</li>
+                    </ul>
+                </div>
+
+                <p><strong>The new tests check:</strong></p>
+                <ul>
+                    <li>every primitive converges from a perturbed seed</li>
+                    <li>signed distances are correct</li>
+                    <li>bitwise repeatability</li>
+                    <li>robustness to noise (soft_l1 does better than linear)</li>
+                    <li>every segment of the real data produces a Hypothesis with finite parameters</li>
+                </ul>
+            </section>
+
+            <!-- Files -->
+            <section>
+                <h2>Files changed</h2>
+
+                <h3>New</h3>
+                <div class="file-list">
+                    <div class="file-item">
+                        <span class="file-name">src/fitpipeline/refinement.py</span>
+                        <p><strong>About 250 lines.</strong>
+                        The refinement engine: chart builders, the least_squares wrapper,
+                        <code>refine_hypothesis</code>, <code>refine_segment</code>.</p>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">tests/test_refinement.py</span>
+                        <p><strong>About 310 lines.</strong> 87 tests: convergence, perturbation, robustness, float32 noise, real data, repeatability.</p>
+                    </div>
+                </div>
+
+                <h3>Changed</h3>
+                <div class="file-list">
+                    <div class="file-item">
+                        <span class="file-name">src/fitpipeline/primitives.py</span>
+                        <p>
+                            + <code>signed_surface_distance</code>, <code>signed_distance_to_*</code><br>
+                            ~ <code>distance_to_*</code> is now <code>abs(signed_...)</code><br>
+                            <strong>No</strong> change in exports (the unsigned <code>surface_distance</code> is still there)
+                        </p>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">src/fitpipeline/hypotheses.py</span>
+                        <p>
+                            + <code>score_parameters</code> (a helper that computes the RMS values)<br>
+                            ~ <code>_perpendicular_basis</code> → <code>perpendicular_basis</code> (public)<br>
+                            ~ <code>propose_hypotheses</code> uses <code>score_parameters</code>
+                        </p>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">src/fitpipeline/geometry.py</span>
+                        <p>
+                            + <code>Normalization.lengths_to_normalized</code> (for mapping back)
+                        </p>
+                    </div>
+                    <div class="file-item">
+                        <span class="file-name">src/fitpipeline/__init__.py</span>
+                        <p>+ exports <code>refine_hypothesis</code>, <code>refine_segment</code>, <code>Refinement</code></p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Flow -->
+            <section>
+                <h2>Pipeline flow</h2>
+
+                <div class="flow-diagram">
+                    <div class="flow-step">Load Mesh</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Prepare Segment</div>
+                    <div class="flow-arrow">→</div>
+                    <div class="flow-step">Hypotheses</div>
+                    <br>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step" style="background: #e3f2fd; color: #667eea;">Refinement ⭐</div>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step" style="opacity: 0.5;">Classifier (next)</div>
+                    <br>
+                    <div class="flow-arrow">↓</div>
+                    <div class="flow-step" style="opacity: 0.5;">predictions.json (next)</div>
+                </div>
+
+                <p>
+                    We now have 📊 <strong>hypotheses</strong> (known and fast) and <strong>refinements</strong> (more accurate).
+                    <br>
+                    The <strong>classifier</strong> (the next stage) takes both and decides:
+                </p>
+                <ul>
+                    <li><code>primitive_type</code>: which refined candidate is best?</li>
+                    <li><code>confidence</code>: how sure it is (based on the relative RMS and the normal angle)</li>
+                    <li><code>reason</code>: a justification (the residuals of all types)</li>
+                </ul>
+            </section>
+
+            <!-- Next -->
+            <section>
+                <h2>The next stage: the classifier</h2>
+
+                <p>
+                    With hypotheses and refinements we have everything needed to make a decision.
+                    The classifier will:
+                </p>
+
+                <ol>
+                    <li><strong>Choose the type:</strong> (in the end it does not pick the lowest RMS, but the simplest type that passes both tolerances; see the <a href="CLASSIFIER_STAGE.html">classifier stage</a>)</li>
+                    <li><strong>Check confidence:</strong> are the RMS and the normal angle good enough?</li>
+                    <li><strong>Reject:</strong> if every type is poor, mark the segment <code>unresolved</code></li>
+                    <li><strong>Predict:</strong> build <code>predictions.json</code> with <code>fit.status</code>, <code>fit.parameters</code>, <code>fit.notes</code></li>
+                </ol>
+
+                <p>
+                    There is also a CLI entry point that runs everything end to end over the 10 meshes.
+                </p>
+            </section>
+
+            <!-- Gotchas -->
+            <section>
+                <h2>Gotchas and notes</h2>
+
+                <div class="warning">
+                    <strong>1. Signed versus unsigned distances</strong><br>
+                    The unsigned distance (abs) has a kink at the surface and breaks finite differences.
+                    The optimizer uses the signed one; the public scorer uses the unsigned one.
+                </div>
+
+                <div class="warning">
+                    <strong>2. The float32 noise floor</strong><br>
+                    The supplied coordinates are float32. ~1e-7 relative RMS is the limit of what can be achieved.
+                    No optimization can go below it.
+                </div>
+
+                <div class="warning">
+                    <strong>3. Non-convergence for a wrong type</strong><br>
+                    If you refine a cone on the vertices of a sphere, the solver cannot minimize well.
+                    It stops at max_nfev=200 with <code>converged=False</code>.
+                    That is expected, and the classifier rejects such a candidate on its residuals.
+                </div>
+
+                <div class="highlight">
+                    <strong>4. Orientation consistency</strong><br>
+                    When a direction vector is refined, it is mapped back to the original frame
+                    with <code>parameters_from_normalized</code>.
+                    This keeps the relevant sign from the seed.
+                </div>
+
+                <div class="success">
+                    <strong>5. Deterministic and repeatable</strong><br>
+                    No randomness and no random seed.
+                    The same segment always gives the same refined parameters, byte for byte.
+                </div>
+            </section>
+
+            <!-- Primitives table -->
+            <section>
+                <h2>Primitives table</h2>
+
+                <table>
+                    <tr>
+                        <th>Primitive</th>
+                        <th>Parameters</th>
+                        <th>Seed (hypotheses.py)</th>
+                        <th>Refinement improvement</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Plane</strong></td>
+                        <td>point, normal</td>
+                        <td>PCA</td>
+                        <td>minimal (already exact)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sphere</strong></td>
+                        <td>center, radius</td>
+                        <td>algebraic fit</td>
+                        <td>minimal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cylinder</strong></td>
+                        <td>axis_point, axis_dir, radius</td>
+                        <td>Gauss map + circle fit</td>
+                        <td>moderate (usually fine already)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Cone</strong></td>
+                        <td>apex, axis_dir, half_angle</td>
+                        <td>tangent planes</td>
+                        <td>moderate</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Torus</strong></td>
+                        <td>center, axis_dir, R, r</td>
+                        <td>Plücker + circle fit</td>
+                        <td><strong>large (4.87e-5 → 1e-16)</strong></td>
+                    </tr>
+                </table>
+            </section>
+        </main>
+
+        <footer>
+            <p>Generated: 2026-09-30 | fitpipeline Refinement Stage</p>
+        </footer>
+    </div>
+</body>
+</html>

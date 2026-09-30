@@ -335,7 +335,7 @@
                 <table>
                     <tr>
                         <th>סוג</th>
-                        <th>מקרה גבולי של...</th>
+                        <th>מכיל כמקרה גבולי</th>
                         <th>לא מתחרה אמיתי</th>
                     </tr>
                     <tr><td>plane</td><td>—</td><td>sphere, cylinder, cone, torus</td></tr>
@@ -351,6 +351,28 @@
             </section>
 
             <section>
+                <h2>🥚 אבחון קוואדריקה לסגמנטים שנדחו</h2>
+                <p>
+                    כשאף מועמד לא מתקבל, הסגמנט הוא <code>unresolved</code>. כדי שהנימוק יסביר <em>מה</em> המשטח,
+                    <code>quadric.py</code> מתאים לקודקודים קוואדריקה כללית:
+                </p>
+                <div class="formula">
+                    xᵀ A x + b · x + d = 0   (10 מקדמים, הווקטור הסינגולרי הקטן ביותר)
+                </div>
+                <p>
+                    ההתאמה נמדדת במרחק Sampson, ‏|Q(x)| / |∇Q(x)|, שהוא קירוב מסדר ראשון למרחק הגאומטרי,
+                    ולכן הוא באותן יחידות יחסיות כמו שאריות הפרימיטיבים ונבדק מול אותו סף (1e-3).
+                </p>
+                <ul>
+                    <li><strong>הקוואדריקה מתאימה:</strong> הערכים העצמיים של A קובעים את הסוג (אליפסואיד, היפרבולואיד חד-יריעתי או דו-יריעתי, קוואדריקה לא מרכזית). לאליפסואיד מדווחים גם חצאי הצירים והמרכז.</li>
+                    <li><strong>אין קוואדריקה מתאימה:</strong> הנימוק אומר שהמשטח חופשי.</li>
+                </ul>
+                <div class="warning">
+                    <strong>⚠️ האבחון רק מסביר.</strong> הוא אף פעם לא הופך סגמנט לפרימיטיב, כי קוואדריקות שרירותיות מחוץ לסוגים הנתמכים במשימה.
+                </div>
+            </section>
+
+            <section>
                 <h2>📊 חישוב ה-Confidence</h2>
 
                 <div class="warning">
@@ -363,8 +385,9 @@
 confidence = position_margin × evidence × separation
 
 position_margin = clip(-log10(position_ratio) / 3, 0, 1)
-    • position_ratio ≈ 1e-9  →  margin ≈ 1.0 (התאמה מושלמת)
-    • position_ratio ≈ 1e-3  →  margin ≈ 0.0 (בדיוק על הסף)
+    (position_ratio = השארית הגרועה חלקי הסף שלה)
+    • position_ratio ≤ 1e-3  →  margin = 1.0 (השארית קטנה פי 1000 לפחות מהסף)
+    • position_ratio = 1     →  margin = 0.0 (בדיוק על הסף)
 
 evidence = min(1, (vertex_count - dof) / (2 × dof))
     • plane עם 4 קדקודים  →  evidence = 1.0
@@ -431,20 +454,21 @@ violation = max(position_ratio, normal_ratio)
                     <strong>✅ mesh_05 seg 0, seg 1 — גליל גס (שתי טבעות בלבד)</strong><br>
                     הקדקודים יושבים גם על כדור (relative_rms ≈ 1.7e-8 לשניהם).<br>
                     אבל שגיאת הנורמלים של הכדור היא 3.0° ו-5.1°, לעומת 1.88° לגליל.<br>
-                    הגליל מנצח בזכות הנורמלים, אבל ה-confidence יורד ל-0.75 ו-0.85 כי יש מתחרה.
+                    הגליל מנצח בזכות הנורמלים, אבל ה-confidence יורד ל-0.75 ו-0.84 כי יש מתחרה.
                 </div>
 
                 <div class="error">
-                    <strong>❌ mesh_09 seg 0 — כדור מעוות</strong><br>
+                    <strong>❌ mesh_09 seg 0 — אליפסואיד</strong><br>
                     המועמד הקרוב ביותר: cylinder עם vertex RMS = 18% של גודל הסגמנט.<br>
                     הסף הוא 0.1%, אז זה חורג פי 180.<br>
-                    תוצאה: unresolved עם confidence = 0.95 (בטוחים שזה לא פרימיטיב).
+                    אבחון הקוואדריקה מראה שהקודקודים יושבים על אליפסואיד עם חצאי צירים 4, 2.5, 1.5 (שארית 2.7e-8), וזו קוואדריקה שלא נתמכת.<br>
+                    תוצאה: unresolved עם confidence = 0.95 (בטוחים שזה לא פרימיטיב נתמך).
                 </div>
 
                 <div class="error">
                     <strong>❌ mesh_10 seg 1 — משטח חופשי</strong><br>
                     המועמד הקרוב ביותר: cone עם vertex RMS = 11% ונורמלים 22°.<br>
-                    שום פרימיטיב לא מתאים.<br>
+                    שום פרימיטיב לא מתאים, וגם שום קוואדריקה כללית (שארית 30%).<br>
                     תוצאה: unresolved.
                 </div>
             </section>
@@ -489,7 +513,7 @@ print(result.candidates)     # כל המועמדים שנבחנו
 
                 <div class="code-block">
 python -m fitpipeline assignment/data predictions.json
-# 43 segments -> predictions.json (cone: 1, cylinder: 5, ...) in 2.1s
+# 43 segments: cone 1, cylinder 5, plane 33, sphere 1, torus 1, unresolved 2 -> predictions.json in 2.3s
                 </div>
 
                 <p>דוגמה לרשומת גליל:</p>
@@ -525,7 +549,7 @@ python -m fitpipeline assignment/data predictions.json
   "kind": "unresolved",
   "primitive_type": null,
   "confidence": 0.95,
-  "reason": "no supported primitive explains the segment; closest is cylinder...",
+  "reason": "no supported primitive explains the segment; closest is cylinder ...; the vertices lie on an ellipsoid with semi-axes 4, 2.5, 1.5 ...",
   "fit": {
     "status": "failed",
     "parameters": null,   // הפרמטרים מוסתרים כי הם לא טובים
@@ -538,11 +562,12 @@ python -m fitpipeline assignment/data predictions.json
             <section>
                 <h2>🧪 בדיקות</h2>
 
-                <p>28 בדיקות חדשות ב-<code>tests/test_classifier.py</code> ו-<code>tests/test_predictions.py</code>:</p>
+                <p>43 בדיקות (כולל הרצות פרמטריות) ב-<code>tests/test_classifier.py</code> ו-<code>tests/test_predictions.py</code>, ובהן 4 לאבחון הקוואדריקה:</p>
 
                 <ul>
                     <li>פרימיטיבים ידועים מסווגים נכון תחת כל פוזה (רוטציה, קנה מידה, הזזה)</li>
-                    <li>משטח חופשי (bumpy) נדחה כ-unresolved</li>
+                    <li>משטח חופשי (bumpy) נדחה כ-unresolved, והנימוק אומר שאף קוואדריקה לא מתאימה</li>
+                    <li>פיסת אליפסואיד נדחית כ-unresolved, וחצאי הצירים שלה מופיעים בנימוק (בכל תנוחה)</li>
                     <li>גליל גס לא מסווג ככדור</li>
                     <li>כדור עם בליטה נדחה</li>
                     <li>משולש בודד = plane עם confidence נמוך</li>
@@ -553,7 +578,7 @@ python -m fitpipeline assignment/data predictions.json
 
                 <div class="code-block">
 uv run pytest tests/test_classifier.py tests/test_predictions.py -v
-# 28 passed in 6.4s
+# 43 passed
                 </div>
             </section>
 
@@ -568,6 +593,10 @@ uv run pytest tests/test_classifier.py tests/test_predictions.py -v
                     <tr>
                         <td><code>classifier.py</code></td>
                         <td>החלטה: primitive או unresolved + confidence</td>
+                    </tr>
+                    <tr>
+                        <td><code>quadric.py</code></td>
+                        <td>אבחון: האם סגמנט שנדחה הוא קוואדריקה לא נתמכת או משטח חופשי</td>
                     </tr>
                     <tr>
                         <td><code>predictions.py</code></td>

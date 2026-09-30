@@ -120,6 +120,32 @@ def test_single_triangle_is_a_plane_without_full_confidence():
     assert result.confidence < classify_segment(synthetic.plane()[0]).confidence
 
 
+def ellipsoid_patch(pose=IDENTITY, semi_axes=(3.0, 2.0, 1.2)):
+    a, b, c = semi_axes
+    return grid_segment(
+        lambda t, p: (a * np.sin(t) * np.cos(p), b * np.sin(t) * np.sin(p), c * np.cos(t)),
+        np.linspace(0.3, 2.6, 24),
+        np.linspace(0.0, 4.0, 32),
+        pose,
+    )
+
+
+@pytest.mark.parametrize("pose_name", POSES)
+def test_ellipsoid_is_unresolved_and_named_with_its_semi_axes(pose_name):
+    pose = POSES[pose_name]
+
+    result = classify_segment(ellipsoid_patch(pose))
+
+    assert result.kind == "unresolved"
+    assert "ellipsoid with semi-axes" in result.reason
+    semi_axes = [3.0 * pose.scale, 2.0 * pose.scale, 1.2 * pose.scale]
+    assert all(f"{value:.4g}" in result.reason for value in semi_axes)
+
+
+def test_freeform_reason_says_no_quadric_fits():
+    assert "no general quadric fits either" in classify_segment(bumpy()).reason
+
+
 def test_zero_area_segment_is_unresolved_not_an_exception():
     record = build_segments(
         "synthetic",
@@ -168,7 +194,7 @@ def test_assignment_meshes_get_the_expected_labels():
     assert labels[("mesh_04", 0)] == "sphere"
     assert labels[("mesh_08", 0)] == "torus"
     assert {labels[("mesh_05", 0)], labels[("mesh_05", 1)]} == {"cylinder"}  # inner and outer wall
-    assert labels[("mesh_09", 0)] is None  # deformed sphere
+    assert labels[("mesh_09", 0)] is None  # ellipsoid: a quadric, but not a supported one
     assert labels[("mesh_10", 1)] is None  # freeform
     assert sum(label is None for label in labels.values()) == 2
     assert sum(label == "plane" for label in labels.values()) == 33
