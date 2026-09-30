@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>שלב Classifier - החלטה סופית</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        header p { font-size: 1.1em; opacity: 0.9; }
+        main {
+            padding: 40px;
+        }
+        section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #11998e;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #11998e;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #38ef7d;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #0d7377;
+        }
+        p, li {
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+        ul, ol {
+            margin-right: 30px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        code {
+            background: #f5f5f5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border-right: 4px solid #11998e;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            direction: ltr;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #11998e22 0%, #38ef7d22 100%);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-right: 4px solid #11998e;
+        }
+        .warning {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-right: 4px solid #ffc107;
+        }
+        .success {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-right: 4px solid #28a745;
+        }
+        .error {
+            background: #f8d7da;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-right: 4px solid #dc3545;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            direction: ltr;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .formula {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            direction: ltr;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .diagram {
+            background: #f0f0f0;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+            font-family: monospace;
+            direction: ltr;
+            white-space: pre;
+            line-height: 1.4;
+        }
+        .flow-step {
+            display: inline-block;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .flow-arrow {
+            display: inline-block;
+            color: #11998e;
+            font-size: 1.5em;
+            margin: 0 10px;
+        }
+        .metric-box {
+            display: inline-block;
+            background: #fff;
+            border: 2px solid #11998e;
+            border-radius: 8px;
+            padding: 15px 25px;
+            margin: 10px;
+            text-align: center;
+        }
+        .metric-box .value {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #11998e;
+        }
+        .metric-box .label {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 שלב Classifier</h1>
+            <p>ההחלטה הסופית: פרימיטיב נתמך או unresolved?</p>
+        </header>
+
+        <main>
+            <section>
+                <h2>📋 מה השלב הזה עושה?</h2>
+                <p>
+                    השלב הזה לוקח את כל המועמדים המעודנים מ-<code>refinement.py</code> ומחליט:
+                </p>
+                <ul>
+                    <li><strong>איזה סוג פרימיטיב?</strong> plane, cylinder, cone, sphere, torus</li>
+                    <li><strong>או שזה לא מתאים?</strong> unresolved (צורה חופשית, לא נתמך, התאמה גרועה)</li>
+                    <li><strong>כמה אנחנו בטוחים?</strong> ציון confidence בין 0 ל-1</li>
+                </ul>
+
+                <div class="highlight">
+                    <strong>💡 עיקרון מנחה:</strong> מועמד מתקבל רק אם הוא עומד בכל הקריטריונים.
+                    אם מספר מועמדים עוברים — הפשוט ביותר מנצח, אלא אם כן מועמד מורכב יותר מסביר את הנורמלים הרבה יותר טוב.
+                </div>
+            </section>
+
+            <section>
+                <h2>🔄 זרימת ההחלטה</h2>
+                <div style="text-align: center; padding: 20px;">
+                    <span class="flow-step">שלב 1: חישוב סף נורמלים</span>
+                    <span class="flow-arrow">←</span>
+                    <span class="flow-step">שלב 2: בחינת כל מועמד</span>
+                    <span class="flow-arrow">←</span>
+                    <span class="flow-step">שלב 3: סינון עוברים</span>
+                    <span class="flow-arrow">←</span>
+                    <span class="flow-step">שלב 4: בחירת מנצח</span>
+                </div>
+
+                <div class="diagram">
+┌─────────────────────────────────────────────────────────────────┐
+│                     לכל סגמנט:                                  │
+│  ┌──────────────┐                                               │
+│  │ Refinements  │ ──► plane, cylinder, cone, sphere, torus     │
+│  └──────────────┘     (מה שהצליח להתכנס)                        │
+│         │                                                       │
+│         ▼                                                       │
+│  ┌──────────────────────────────────────────┐                  │
+│  │ בדיקת קריטריונים לכל מועמד:              │                  │
+│  │  • שאריות קדקודים ≤ סף?                  │                  │
+│  │  • שאריות נורמלים ≤ סף?                  │                  │
+│  │  • מספיק קדקודים?                        │                  │
+│  │  • רדיוס סביר?                           │                  │
+│  └──────────────────────────────────────────┘                  │
+│         │                                                       │
+│    ┌────┴────┐                                                  │
+│    ▼         ▼                                                  │
+│ [עוברים]  [נכשלים]                                              │
+│    │         │                                                  │
+│    ▼         ▼                                                  │
+│ בחר את   ← אם אין עוברים                                        │
+│ הפשוט      ─► unresolved                                        │
+│ ביותר      (שמור את הקרוב ביותר לדוח)                           │
+└─────────────────────────────────────────────────────────────────┘
+                </div>
+            </section>
+
+            <section>
+                <h2>📏 הקריטריונים לקבלת מועמד</h2>
+
+                <h3>1. שאריות קדקודים (Position Residuals)</h3>
+                <p>כל קודקוד צריך להיות קרוב למשטח המועמד:</p>
+                <div class="formula">
+                    RMS(distances) / scale ≤ 0.001  <br>
+                    MAX(distance) / scale ≤ 0.01
+                </div>
+                <p>
+                    כאשר <code>scale</code> הוא ה-RMS של המרחקים מהמרכז — גודל טיפוסי של הסגמנט.
+                    זה אומר שהסטייה הממוצעת צריכה להיות פחות מאלפית מגודל הסגמנט.
+                </p>
+
+                <h3>2. שאריות נורמלים (Normal Residuals)</h3>
+                <div class="warning">
+                    <strong>⚠️ למה נורמלים הכרחיים?</strong><br>
+                    קדקודים לבדם לא מספיקים! שתי טבעות של גליל גס יושבות בדיוק גם על כדור.
+                    רק הנורמלים מבדילים ביניהם.
+                </div>
+
+                <p>הזווית בין נורמל הפאה לנורמל המשטח צריכה להיות קטנה:</p>
+                <div class="formula">
+                    RMS(angles) ≤ normal_tolerance
+                </div>
+
+                <p><strong>מהו הסף?</strong> הוא תלוי בטסלציה של הסגמנט:</p>
+                <div class="formula">
+                    normal_tolerance = max(0.5°, 0.5 × max_dihedral_angle)
+                </div>
+
+                <p>
+                    <code>max_dihedral_angle</code> היא הזווית הגדולה ביותר בין נורמלים של משולשים שחולקים צלע.
+                    בגליל עם 32 צלעות, הזווית הדיהדרלית היא 11.25°, אז הסף יהיה 5.6°.
+                    זה מונע דחייה של פרימיטיבים לגיטימיים רק בגלל טסלציה גסה.
+                </p>
+
+                <h3>3. מספר קדקודים מינימלי</h3>
+                <table>
+                    <tr>
+                        <th>סוג</th>
+                        <th>דרגות חופש</th>
+                        <th>מינימום קדקודים</th>
+                    </tr>
+                    <tr><td>plane</td><td>3</td><td>3 (ללא הגבלה נוספת)</td></tr>
+                    <tr><td>sphere</td><td>4</td><td>7</td></tr>
+                    <tr><td>cylinder</td><td>5</td><td>8</td></tr>
+                    <tr><td>cone</td><td>6</td><td>9</td></tr>
+                    <tr><td>torus</td><td>7</td><td>10</td></tr>
+                </table>
+                <p>הסיבה: צריך יותר מדידות (קדקודים) מפרמטרים כדי שההתאמה תהיה משמעותית.</p>
+
+                <h3>4. רדיוס סביר</h3>
+                <div class="formula">
+                    radius ≤ 1000 × scale
+                </div>
+                <p>
+                    "כדור" ברדיוס מיליון פעמים גודל הסגמנט הוא בעצם מישור.
+                    אם הרדיוס גדול מדי, המועמד נדחה.
+                </p>
+            </section>
+
+            <section>
+                <h2>🏆 בחירת המנצח — Simplicity Wins</h2>
+
+                <p>אם מספר מועמדים עוברים את כל הקריטריונים, איך בוחרים?</p>
+
+                <div class="highlight">
+                    <strong>כלל בסיסי:</strong> הפשוט ביותר מנצח!<br>
+                    plane &lt; sphere &lt; cylinder &lt; cone &lt; torus
+                </div>
+
+                <p>
+                    מישור תמיד יעדיף על כדור (כי מישור הוא כדור עם רדיוס אינסופי).
+                    גליל יעדיף על חרוט (כי גליל הוא חרוט עם זווית 0).
+                </p>
+
+                <h3>חריג: מועמד מורכב שמסביר טוב יותר</h3>
+                <p>מועמד מורכב יותר יחליף את הפשוט רק אם:</p>
+                <div class="formula">
+                    complex.normal_error &lt; 0.8 × simple.normal_error<br>
+                    AND<br>
+                    improvement &gt; 0.005°
+                </div>
+                <p>
+                    זאת אומרת: הוא צריך להפחית את שגיאת הנורמלים לפחות ב-20% וגם ב-0.005 מעלות לפחות.
+                </p>
+
+                <h3>מי נחשב "מתחרה" ומי לא?</h3>
+                <table>
+                    <tr>
+                        <th>סוג</th>
+                        <th>מקרה גבולי של...</th>
+                        <th>לא מתחרה אמיתי</th>
+                    </tr>
+                    <tr><td>plane</td><td>—</td><td>sphere, cylinder, cone, torus</td></tr>
+                    <tr><td>sphere</td><td>plane (r→∞)</td><td>torus</td></tr>
+                    <tr><td>cylinder</td><td>plane (r→∞)</td><td>cone, torus</td></tr>
+                    <tr><td>cone</td><td>plane, cylinder</td><td>—</td></tr>
+                    <tr><td>torus</td><td>sphere, cylinder</td><td>—</td></tr>
+                </table>
+                <p>
+                    כשגליל עובר, גם חרוט כנראה יעבור (זווית קרובה לאפס).
+                    זה לא "מתחרה" אמיתי כי זה אותו משטח.
+                </p>
+            </section>
+
+            <section>
+                <h2>📊 חישוב ה-Confidence</h2>
+
+                <div class="warning">
+                    <strong>⚠️ זה לא הסתברות!</strong><br>
+                    ה-confidence הוא ציון היוריסטי בין 0 ל-1, לא הסתברות מכוילת.
+                </div>
+
+                <h3>עבור פרימיטיב שהתקבל:</h3>
+                <div class="code-block">
+confidence = position_margin × evidence × separation
+
+position_margin = clip(-log10(position_ratio) / 3, 0, 1)
+    • position_ratio ≈ 1e-9  →  margin ≈ 1.0 (התאמה מושלמת)
+    • position_ratio ≈ 1e-3  →  margin ≈ 0.0 (בדיוק על הסף)
+
+evidence = min(1, (vertex_count - dof) / (2 × dof))
+    • plane עם 4 קדקודים  →  evidence = 1.0
+    • cylinder עם 8 קדקודים  →  evidence = 0.3
+    • cylinder עם 15 קדקודים →  evidence = 1.0
+
+separation = min over rivals of: 1 - (my_normal_error / rival_normal_error)
+    • אין מתחרים  →  separation = 1.0
+    • מתחרה עם אותה שגיאה  →  separation = 0.0
+                </div>
+
+                <p>הנוסחה המלאה:</p>
+                <div class="formula">
+                    (0.6 + 0.39 × position_margin) × (0.5 + 0.5 × evidence) × (0.6 + 0.4 × separation)
+                </div>
+                <p>הטווח בפועל: 0.18 עד 0.99</p>
+
+                <h3>עבור unresolved:</h3>
+                <div class="code-block">
+confidence = 0.5 + 0.45 × clip(log10(violation) / 2, 0, 1)
+
+violation = max(position_ratio, normal_ratio)
+    • violation = 10  →  confidence ≈ 0.73
+    • violation = 100 →  confidence ≈ 0.95
+                </div>
+                <p>
+                    ככל שהמועמד הקרוב ביותר רחוק יותר מהסף, יותר בטוחים שזה באמת לא פרימיטיב.
+                </p>
+            </section>
+
+            <section>
+                <h2>📈 תוצאות על מערך הנתונים</h2>
+
+                <div style="text-align: center; margin: 30px 0;">
+                    <div class="metric-box">
+                        <div class="value">33</div>
+                        <div class="label">plane</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">5</div>
+                        <div class="label">cylinder</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">1</div>
+                        <div class="label">cone</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">1</div>
+                        <div class="label">sphere</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">1</div>
+                        <div class="label">torus</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="value">2</div>
+                        <div class="label">unresolved</div>
+                    </div>
+                </div>
+
+                <h3>מקרים מעניינים:</h3>
+
+                <div class="success">
+                    <strong>✅ mesh_05 seg 0, seg 1 — גליל גס (שתי טבעות בלבד)</strong><br>
+                    הקדקודים יושבים גם על כדור (relative_rms ≈ 1.7e-8 לשניהם).<br>
+                    אבל שגיאת הנורמלים של הכדור היא 3.0° ו-5.1°, לעומת 1.88° לגליל.<br>
+                    הגליל מנצח בזכות הנורמלים, אבל ה-confidence יורד ל-0.75 ו-0.85 כי יש מתחרה.
+                </div>
+
+                <div class="error">
+                    <strong>❌ mesh_09 seg 0 — כדור מעוות</strong><br>
+                    המועמד הקרוב ביותר: cylinder עם vertex RMS = 18% של גודל הסגמנט.<br>
+                    הסף הוא 0.1%, אז זה חורג פי 180.<br>
+                    תוצאה: unresolved עם confidence = 0.95 (בטוחים שזה לא פרימיטיב).
+                </div>
+
+                <div class="error">
+                    <strong>❌ mesh_10 seg 1 — משטח חופשי</strong><br>
+                    המועמד הקרוב ביותר: cone עם vertex RMS = 11% ונורמלים 22°.<br>
+                    שום פרימיטיב לא מתאים.<br>
+                    תוצאה: unresolved.
+                </div>
+            </section>
+
+            <section>
+                <h2>🔧 API</h2>
+
+                <div class="code-block">
+from fitpipeline import classify_segment, load_mesh_segments
+
+mesh = load_mesh_segments("assignment/data", "mesh_02")
+record = mesh.segments[0]  # הגליל
+
+result = classify_segment(record)
+
+print(result.kind)           # "primitive"
+print(result.primitive_type) # "cylinder"
+print(result.confidence)     # 0.99
+print(result.reason)         # "cylinder: vertex RMS 9.6e-09..."
+print(result.best)           # ה-Candidate שנבחר
+print(result.candidates)     # כל המועמדים שנבחנו
+                </div>
+
+                <h3>מבנה Classification:</h3>
+                <table>
+                    <tr><th>שדה</th><th>סוג</th><th>תיאור</th></tr>
+                    <tr><td>kind</td><td>str</td><td>"primitive" או "unresolved"</td></tr>
+                    <tr><td>primitive_type</td><td>str | None</td><td>plane/cylinder/cone/sphere/torus או None</td></tr>
+                    <tr><td>confidence</td><td>float</td><td>0.0 עד 1.0</td></tr>
+                    <tr><td>reason</td><td>str</td><td>הסבר קצר להחלטה</td></tr>
+                    <tr><td>best</td><td>Candidate</td><td>המועמד שנבחר (או הקרוב ביותר)</td></tr>
+                    <tr><td>candidates</td><td>tuple</td><td>כל המועמדים שנבחנו</td></tr>
+                    <tr><td>scale</td><td>float</td><td>גודל הסגמנט (RMS extent)</td></tr>
+                    <tr><td>normal_tolerance_radians</td><td>float</td><td>סף הנורמלים שחושב</td></tr>
+                </table>
+            </section>
+
+            <section>
+                <h2>📝 predictions.json</h2>
+
+                <p>ה-CLI מייצר קובץ predictions.json עם רשומה אחת לכל סגמנט:</p>
+
+                <div class="code-block">
+python -m fitpipeline assignment/data predictions.json
+# 43 segments -> predictions.json (cone: 1, cylinder: 5, ...) in 2.1s
+                </div>
+
+                <p>דוגמה לרשומת גליל:</p>
+                <div class="code-block">
+{
+  "mesh_id": "mesh_02",
+  "segment_id": 0,
+  "kind": "primitive",
+  "primitive_type": "cylinder",
+  "confidence": 0.99,
+  "reason": "cylinder: vertex RMS 9.6e-09 of extent, normal RMS 1.88 deg",
+  "fit": {
+    "status": "fitted",
+    "parameters": {
+      "axis_point": [0, 0, 0],
+      "axis_direction": [0, 0, 1],
+      "radius": 2.0
+    },
+    "notes": "scipy least_squares ... Converged after 1 residual evaluations.",
+    "residual": {
+      "vertex_rms_distance": 3.47e-08,
+      "facet_normal_rms_degrees": 1.88
+    }
+  }
+}
+                </div>
+
+                <p>דוגמה לרשומת unresolved:</p>
+                <div class="code-block">
+{
+  "mesh_id": "mesh_09",
+  "segment_id": 0,
+  "kind": "unresolved",
+  "primitive_type": null,
+  "confidence": 0.95,
+  "reason": "no supported primitive explains the segment; closest is cylinder...",
+  "fit": {
+    "status": "failed",
+    "parameters": null,   // הפרמטרים מוסתרים כי הם לא טובים
+    "notes": "Attempted cylinder, revised to unresolved..."
+  }
+}
+                </div>
+            </section>
+
+            <section>
+                <h2>🧪 בדיקות</h2>
+
+                <p>28 בדיקות חדשות ב-<code>tests/test_classifier.py</code> ו-<code>tests/test_predictions.py</code>:</p>
+
+                <ul>
+                    <li>פרימיטיבים ידועים מסווגים נכון תחת כל פוזה (רוטציה, קנה מידה, הזזה)</li>
+                    <li>משטח חופשי (bumpy) נדחה כ-unresolved</li>
+                    <li>גליל גס לא מסווג ככדור</li>
+                    <li>כדור עם בליטה נדחה</li>
+                    <li>משולש בודד = plane עם confidence נמוך</li>
+                    <li>סגמנט בשטח אפס = unresolved בלי exception</li>
+                    <li>ה-confidence לא משתנה עם הפוזה</li>
+                    <li>predictions.json תקני ודטרמיניסטי</li>
+                </ul>
+
+                <div class="code-block">
+uv run pytest tests/test_classifier.py tests/test_predictions.py -v
+# 28 passed in 6.4s
+                </div>
+            </section>
+
+            <section>
+                <h2>📚 סיכום</h2>
+
+                <table>
+                    <tr>
+                        <th>קובץ</th>
+                        <th>תפקיד</th>
+                    </tr>
+                    <tr>
+                        <td><code>classifier.py</code></td>
+                        <td>החלטה: primitive או unresolved + confidence</td>
+                    </tr>
+                    <tr>
+                        <td><code>predictions.py</code></td>
+                        <td>בניית predictions.json עם fit/residual/notes</td>
+                    </tr>
+                    <tr>
+                        <td><code>__main__.py</code></td>
+                        <td>CLI: python -m fitpipeline data/ output.json</td>
+                    </tr>
+                </table>
+
+                <div class="highlight">
+                    <strong>🎯 השורה התחתונה:</strong><br>
+                    הקריטריונים מבטיחים שרק התאמות איכותיות מתקבלות.<br>
+                    הנורמלים מבדילים בין פרימיטיבים שהקדקודים לא יכולים.<br>
+                    הפשוט ביותר מנצח, וה-confidence משקף את איכות ההחלטה.
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
